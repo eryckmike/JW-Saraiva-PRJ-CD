@@ -1,9 +1,17 @@
-import { ContainerHome } from "./styles";
+import { ContainerHome, DashBoardTitulo, DashBoardPainelGest} from "./styles";
+
 
 export function Home() {
   return (
+    <>
     <ContainerHome>
-      <h1>Home</h1>
-    </ContainerHome>
+      <DashBoardTitulo>Painel de Gestão</DashBoardTitulo>
+      <DashBoardPainelGest>
+        <h2>Resumo Geral</h2>
+        <p>Total de motoristas</p>
+      </DashBoardPainelGest>
+
+    </ContainerHome></>
   )
 }
+
