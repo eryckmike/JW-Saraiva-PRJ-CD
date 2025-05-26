@@ -6,7 +6,7 @@ export function Frotas(){
 
     //simular frota para cards
     const veiculos = [
-        { id: 1, placa: "ABC-1234", modelo: "Onix" },
+        { id: 1, placa: "ABC-1234", modelo: "HB20" },
         { id: 2, placa: "XYZ-5678", modelo: "Corolla" },
       ];
 

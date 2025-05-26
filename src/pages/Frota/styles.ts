@@ -71,6 +71,6 @@ export const CartaoVeiculo = styled.div`
   p{
     padding-top:1rem;
     padding-left: 1rem;
-    color: 030507;
+    color: #030507;
   }
 `;

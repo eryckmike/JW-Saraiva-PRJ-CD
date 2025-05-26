@@ -1,17 +1,37 @@
-import { ContainerHome, DashBoardTitulo, DashBoardPainelGest} from "./styles";
+import { ContainerHome, DashBoardTitulo, DashBoardPainelGest, DashBoardPainelAusentes, DashBoardPainelCirculacao, TabelaDireita} from "./styles";
 
 
 export function Home() {
   return (
     <>
     <ContainerHome>
-      <DashBoardTitulo>Painel de Gestão</DashBoardTitulo>
-      <DashBoardPainelGest>
-        <h2>Resumo Geral</h2>
-        <p>Total de motoristas</p>
-      </DashBoardPainelGest>
+      <div>
+        <DashBoardTitulo>Painel de Gestão</DashBoardTitulo>
+        <DashBoardPainelGest>
+          <h2>Resumo Geral</h2>
+          <p>Total de motoristas</p>
+        </DashBoardPainelGest>
+      </div>
 
-    </ContainerHome></>
+      <TabelaDireita>
+
+        <div>
+          <DashBoardTitulo>Tarefas Pendentes</DashBoardTitulo>
+          <DashBoardPainelAusentes>
+
+          </DashBoardPainelAusentes>
+        </div>
+
+        <div>
+          <DashBoardTitulo>Fora de Circulação</DashBoardTitulo>
+          <DashBoardPainelCirculacao>
+
+          </DashBoardPainelCirculacao>
+        </div>
+
+      </TabelaDireita>
+    </ContainerHome>
+    </>
   )
 }
 
