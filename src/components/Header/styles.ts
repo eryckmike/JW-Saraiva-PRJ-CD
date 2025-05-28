@@ -1,53 +1,66 @@
-import {styled} from "styled-components";
-
+import styled from 'styled-components';
 
 export const HeaderConteiner = styled.header`
-display: flex;
-background-color: #FFFFFF;
-align-items: center;
-justify-content: space-between;
-padding: 1rem 2rem;
-`
-
-export const Divider = styled.div`
-height: 3px;
-background-color: #788793;
-width: 90%;
-margin: 0 auto;
-`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #E8EBED; /* Cinza claro */
+  padding: 20px 40px;
+  font-family: 'Poppins', sans-serif;
+`;
 
 export const LogoWrapper = styled.div`
-img{height: 50px;
-}
-`
+  img {
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+`;
+
 export const NavMenu = styled.nav`
-display: flex;
-gap: 10rem;
+  display: flex;
+  gap: 30px;
 
-    a{
-        text-decoration: none;
-        color: #030507;
+  a {
+    color: #7A8A96;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.3s, border-bottom 0.3s;
 
-        &:hover{
-            text-decoration: underline;
-        }
-
-        &.active {
-        font-weight: bold;
-        text-decoration: underline;
+    &.active {
+      color: #DE562C;
+      border-bottom: 2px solid #DE562C;
+      padding-bottom: 2px;
     }
 
+    &:hover {
+      color: #DE562C;
     }
-`
+  }
+`;
 
-export const UserProfile =  styled.div`
-display: flex;
-align-items: center;
-
-img{
-    height: 60px;
-    width: 60px;
+export const UserProfile = styled.div`
+  img {
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
-    border: 4px solid #788793;
-}
-`
+    border: 2px solid #7A8A96;
+    transition: border-color 0.3s;
+
+    &:hover {
+      border-color: #DE562C;
+    }
+  }
+`;
+
+export const Divider = styled.hr`
+  border: none;
+  height: 1px;
+  background: #7A8A96; /* Cor intermediária para dividir */
+  margin: 0;
+`;
