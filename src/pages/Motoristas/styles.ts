@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MotoristasConteiner = styled.div`
+export const MotoristasContainer = styled.div`
   display: flex;
   font-family: 'Poppins', sans-serif;
   background: #0d1117;
