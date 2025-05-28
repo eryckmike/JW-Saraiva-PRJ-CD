@@ -1,17 +1,17 @@
-import styled, { Styled } from "styled-components";
+import {styled} from "styled-components";
 
 export const SignConteiner = styled.div`
 display: flex;
 align-items: center;
-padding: 8rem 2rem;
-gap: 5rem;
+padding: 8rem 15rem;
+gap: 10rem;
 `
 
 export const LoginConteiner = styled.div`
 
 background-color: #E8EBED;
-width: 520px;
-height: 600px;
+width: 420px;
+height: 500px;
 border: 5px solid #788793;
 border-radius: 5px;
 padding-top: 8rem;
@@ -49,6 +49,7 @@ width: 100%;
 
 export const TelaLogin = styled.div`
 img{
-    padding: 2rem;
+width: 450px;
+    padding: 0rem;
 }
 `

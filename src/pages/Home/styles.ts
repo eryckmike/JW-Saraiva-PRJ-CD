@@ -3,8 +3,8 @@ import { styled } from "styled-components";
 export const ContainerHome = styled.div`
 display: flex;
 align-items: center;
-padding: 4rem 8rem;
-gap: 10rem;
+padding: 2rem 6rem;
+gap: 5rem;
 
 div{
     flex-direction: column;

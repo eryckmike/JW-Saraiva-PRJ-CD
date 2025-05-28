@@ -8,7 +8,7 @@ export function Sign(){
             </TelaLogin>
             <LoginConteiner>
                 <FormGroup>
-                    <UserInfoLabel htmlFor="username">Digite seu usuário ou e-mail:</UserInfoLabel>
+                    <UserInfoLabel htmlFor="username">Digite seu usuário ou e-mail: </UserInfoLabel>
                     <Input id="username" type="text" />
                 </FormGroup>
                 <FormGroup>
