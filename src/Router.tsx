@@ -7,6 +7,8 @@ import { Motoristas } from "./pages/Motoristas";
 import { Sign } from "./pages/Sign";
 import { SignUp } from "./pages/SignUp";
 import { Perfil } from "./pages/Perfil";
+import { CadastroFrota } from "./pages/CadastroFrota";
+
 export function Router() {
   return (
     <Routes>
@@ -19,6 +21,7 @@ export function Router() {
             <Route path="/sign" element={<Sign/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/perfil" element={<Perfil/>}/>
+            <Route path="/cadastro-frota" element={<CadastroFrota/>}/>
         </Route>
     </Routes>
   )
