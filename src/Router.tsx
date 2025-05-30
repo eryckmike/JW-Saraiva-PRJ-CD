@@ -22,3 +22,7 @@ export function Router() {
     </Routes>
   )
 }
+
+import CadastroMotorista from "./pages/SignUpMotoristas";
+<Route path="/cadastro" element={<CadastroMotorista />} />
+
