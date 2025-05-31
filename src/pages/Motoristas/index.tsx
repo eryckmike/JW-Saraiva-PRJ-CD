@@ -1,6 +1,5 @@
 import {
     MotoristasContainer,
-    BarraLateral,
     PainelMotoristas,
     BarraPesquisa,
     GradeMotoristas,
@@ -19,20 +18,10 @@ import {
   
     return (
       <MotoristasContainer>
-        <BarraLateral>
-          <ul>
-            <li>Motoristas</li>
-            <li>Viagens</li>
-            <li>Entradas/Saídas</li>
-            <li>Cadastrar</li>
-          </ul>
-        </BarraLateral>
-  
         <PainelMotoristas>
           <BarraPesquisa>
             <input type="text" placeholder="Nome / Cod. Motorista" />
           </BarraPesquisa>
-  
           <GradeMotoristas>
             {motoristas.map((m) => (
               <CartaoMotorista key={m.id}>

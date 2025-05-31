@@ -64,3 +64,51 @@ export const Divider = styled.hr`
   background: #7A8A96; /* Cor intermediária para dividir */
   margin: 0;
 `;
+
+export const BarraLateral = styled.div`
+  width: 250px;
+  background: #161b22;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+    li {
+      margin-bottom: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #7A8A96;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      transition: color 0.3s, transform 0.3s;
+
+      &:hover {
+        color: #DE562C;
+        transform: translateX(25px);
+      }
+
+      a {
+        text-decoration: none;
+        }
+
+      a.active {
+        color: #DE562C!important;
+        font-weight: bold;
+      }
+
+      
+      a:visited {
+        text-decoration: none;
+        color: #7A8A96; /* mesma cor base dos textos da barra */
+      }
+
+        
+    }
+  
+`;

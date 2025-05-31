@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { 
   MotoristasContainer, 
-  BarraLateral, 
   PainelMotoristas, 
   FormularioCadastro, 
   CampoInput, 
@@ -30,15 +29,6 @@ const CadastroMotorista: React.FC = () => {
 
   return (
     <MotoristasContainer>
-      <BarraLateral>
-        <ul>
-          <li>Motoristas</li>
-          <li>Viagens</li>
-          <li>Entradas/Saídas</li>
-          <li style={{ color: "#DE562C" }}>Cadastrar</li>
-        </ul>
-      </BarraLateral>
-
       <PainelMotoristas>
         <h2>Cadastrar Motorista</h2>
         <FormularioCadastro onSubmit={handleSubmit}>

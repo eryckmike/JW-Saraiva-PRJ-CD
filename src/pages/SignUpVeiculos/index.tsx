@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { 
-  VeiculosContainer, 
-  BarraLateral, 
+  VeiculosContainer,
   PainelVeiculos, 
   FormularioCadastro, 
   CampoInput, 
   BotaoCadastro 
 } from "./styles";
-import { Veiculo } from "./types";
+import { Veiculo } from "./styles";
 
 const CadastroVeiculo: React.FC = () => {
   const [formData, setFormData] = useState<Veiculo>({
@@ -28,19 +27,6 @@ const CadastroVeiculo: React.FC = () => {
 
   return (
     <VeiculosContainer>
-      <BarraLateral>
-        <ul>
-          <li>Veículos</li>
-          <li>Frotas</li>
-          <li>Manutenção</li>
-          <li 
-            onClick={() => console.log("Tela de Cadastro de Veículo")}
-            style={{ cursor: "pointer", color: "#DE562C" }}>
-            Cadastrar
-          </li>
-        </ul>
-      </BarraLateral>
-
       <PainelVeiculos>
         <h2>Cadastrar Veículo</h2>
         <FormularioCadastro onSubmit={handleSubmit}>

@@ -1,48 +1,28 @@
 import styled from "styled-components";
 
+export interface Veiculo {
+  placa: string;
+  codigoVeiculo: string;
+  cor: string;
+  categoria: string;
+}
+
+
 export const VeiculosContainer = styled.div`
   display: flex;
   font-family: 'Poppins', sans-serif;
   background: #0d1117;
   color: #E8EBED;
-  min-height: 100vh;
-`;
-
-export const BarraLateral = styled.div`
-  width: 250px;
-  background: #161b22;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      margin-bottom: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #7A8A96;
-      font-size: 16px;
-      transition: color 0.3s, transform 0.3s;
-
-      &:hover {
-        color: #DE562C;
-        transform: translateX(5px);
-      }
-    }
-  }
+  width: 100%;
+ 
 `;
 
 export const PainelVeiculos = styled.div`
   flex: 1;
-  padding: 60px 60px 40px; /* Espaço superior e lateral esquerdo maior */
+  padding: 60px 60px 40px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinhamento à esquerda */
+  align-items: flex-start;
 
   h2 {
     font-size: 26px;

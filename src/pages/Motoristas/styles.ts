@@ -6,6 +6,7 @@ export const MotoristasContainer = styled.div`
   background: #0d1117;
   color: #E8EBED;
   min-height: 100vh;
+  width: 100%;
 `;
 
 export const BarraLateral = styled.div`

@@ -5,38 +5,9 @@ export const FrotasConteiner = styled.div`
   font-family: 'Poppins', sans-serif;
   background: #0d1117;
   color: #E8EBED;
-  min-height: 100vh;
+  width: 100%;
 `;
 
-export const BarraLateral = styled.div`
-  width: 250px;
-  background: #161b22;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      margin-bottom: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      color: #7A8A96;
-      font-size: 16px;
-      letter-spacing: 0.5px;
-      transition: color 0.3s, transform 0.3s;
-
-      &:hover {
-        color: #DE562C;
-        transform: translateX(25px);
-      }
-    }
-  }
-`;
 
 export const VeiculosPainel = styled.div`
   flex: 1;

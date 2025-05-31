@@ -1,4 +1,4 @@
-import { FrotasConteiner, BarraLateral, VeiculosPainel, BarraPesquisa, GradeVeiculos, CartaoVeiculo } from "./styles";
+import { FrotasConteiner, VeiculosPainel, BarraPesquisa, GradeVeiculos, CartaoVeiculo } from "./styles";
 import { useState } from 'react';
  
 
@@ -31,18 +31,6 @@ export function Frotas() {
 
         return (
             <FrotasConteiner>
-              <BarraLateral>
-                <ul>
-                  <li>Veículos</li>
-                  <li>Viagens</li>
-                  <li>Entradas/Saídas</li>
-                  <li>Entradas/Saídas/CT's</li>
-                  <li>Manutenções</li>
-                  <li>Abastecimentos</li>
-                  <li>Multas</li>
-                  <li>Cadastras</li>
-                </ul>
-              </BarraLateral>
         
               <VeiculosPainel>
                 <BarraPesquisa>
