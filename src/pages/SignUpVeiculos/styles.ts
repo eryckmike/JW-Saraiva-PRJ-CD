@@ -39,7 +39,16 @@ export const BarraLateral = styled.div`
 
 export const PainelVeiculos = styled.div`
   flex: 1;
-  padding: 20px 40px 40px; 
+  padding: 60px 60px 40px; /* Espaço superior e lateral esquerdo maior */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinhamento à esquerda */
+
+  h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
 `;
 
 export const FormularioCadastro = styled.form`
@@ -47,6 +56,7 @@ export const FormularioCadastro = styled.form`
   flex-direction: column;
   gap: 20px;
   max-width: 400px;
+  width: 100%;
 `;
 
 export const CampoInput = styled.input`
