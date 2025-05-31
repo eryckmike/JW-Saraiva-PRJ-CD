@@ -32,7 +32,7 @@ export const BarraLateral = styled.div`
 
       &:hover {
         color: #DE562C;
-        transform: translateX(5px);
+        transform: translateX(25px);
       }
     }
   }

@@ -5,7 +5,7 @@ import {
   DashBoardPainelAusentes,
   DashBoardPainelCirculacao,
 } from "./styles";
-import { useState } from 'react';
+
 
 export function Home() {
   return (

@@ -7,7 +7,7 @@ import {
   CampoInput, 
   BotaoCadastro 
 } from "./styles";
-import { Motorista } from "./types";
+import { Motorista } from "./styles";
 
 const CadastroMotorista: React.FC = () => {
   const [formData, setFormData] = useState<Motorista>({
