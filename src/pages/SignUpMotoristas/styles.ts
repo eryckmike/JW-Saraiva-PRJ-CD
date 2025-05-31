@@ -40,11 +40,8 @@ export const BarraLateral = styled.div`
 export const PainelMotoristas = styled.div`
   flex: 1;
   padding: 20px 40px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
 `;
+
 
 export const FormularioCadastro = styled.form`
   display: flex;
