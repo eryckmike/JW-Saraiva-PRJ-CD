@@ -1,87 +1,60 @@
 import styled from "styled-components";
 
-export const PainelContainer = styled.div`
-  background-color: #E8EBED;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 1200px;
-  margin: 2rem auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+interface ColunaProps {
+  flex?: string;
+}
 
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
+interface TipoMovimentacaoProps {
+  tipo: "Entrada" | "Saída";
+}
+
+export const PainelContainer = styled.div`
+  font-family: 'Poppins', sans-serif;
+  background: #0d1117;
+  color: #E8EBED;
+  min-height: 100vh;
+  padding: 60px 40px;
+  width: 100%;
 `;
 
-export const PainelTitle = styled.h1`
-  color: #1C1C1C;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 2rem;
+export const PainelTitle = styled.h2`
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 32px;
 `;
 
 export const ListaEntradasSaidas = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
 `;
 
-export const ItemEntradaSaida = styled.div`
+export const ItemEntradaSaida = styled.div<{ header?: boolean }>`
   display: flex;
-  align-items: center;
-  background-color: #fff;
+  background: ${({ header }) => (header ? "transparent" : "#161B22")};
+  padding: 16px;
   border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
+  border: ${({ header }) => (header ? "none" : "1px solid #30363d")};
+  align-items: center;
+  gap: 12px;
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
   }
 `;
-
-interface ColunaProps {
-  flex?: string;
-}
 
 export const Coluna = styled.div<ColunaProps>`
   flex: ${({ flex }) => flex || "1"};
-  color: #7A8A96;
-  font-size: 0.95rem;
+  color: #E8EBED;
+  font-size: 15px;
 
-  &.status-patio {
-    color: #DE562C;
-    font-weight: bold;
-  }
-
-  &.status-saida {
-    color: #1C1C1C;
-    font-weight: bold;
+  strong {
+    color: #7A8A96;
   }
 `;
 
-export const Status = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &::before {
-    content: '';
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #DE562C;
-    display: inline-block;
-  }
-
-  &.status-saida::before {
-    background-color: #1C1C1C;
-  }
+export const TipoMovimentacao = styled.span<TipoMovimentacaoProps>`
+  color: ${({ tipo }) => (tipo === "Entrada" ? "#2ecc71" : "#DE562C")};
+  font-weight: 600;
 `;
