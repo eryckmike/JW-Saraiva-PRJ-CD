@@ -12,6 +12,8 @@ import CadastroMotorista from "./pages/SignUpMotoristas";
 import CadastroVeiculo from "./pages/SignUpVeiculos"; 
 import { BarraLateralLayout } from "./layouts/BarraLateralFrotaLayout";
 import { BarraLateralMotoristaLayout } from "./layouts/BarraLateralLayoutMotoristas";
+import { PainelEntradasSaidas } from "./painel";
+
 
 export function Router() {
   return (
@@ -29,10 +31,13 @@ export function Router() {
         <Route path="/" element={<BarraLateralLayout />}>
             <Route path="/frotas" element={<Frotas />} />
             <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
+  
+
         </Route>
         <Route path="/" element={<BarraLateralMotoristaLayout />}>
             <Route path="/motoristas" element={<Motoristas />} />
             <Route path="/cadastro-motorista" element={<CadastroMotorista />} />
+            <Route path="/entradas-saidas" element={<PainelEntradasSaidas />} />
         </Route>
 
         <Route path="*" element={<h1>Página não encontrada</h1>} />

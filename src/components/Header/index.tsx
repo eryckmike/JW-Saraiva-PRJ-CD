@@ -81,14 +81,15 @@ export function BarraLateralMotorista() {
           </NavLink>
         </li>
         <li>Viagens</li>
-        <li>Entradas/Saídas</li>
+        <li>
+            <NavLink to="/entradas-saidas" className={({ isActive }) => isActive ? "active" : ""}> Entradas/Saídas </NavLink> </li>
         <li>Entradas/Saídas/CT's</li>
         <li>Manutenções</li>
         <li>Abastecimentos</li>
         <li>Multas</li>
         <li>
           <NavLink to="/cadastro-motorista" className={({ isActive }) => isActive ? "active" : ""}>
-          Cadastras
+          Cadastrar
           </NavLink>
           </li>
       </ul>
