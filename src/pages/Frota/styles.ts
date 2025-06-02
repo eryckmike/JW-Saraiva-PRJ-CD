@@ -8,7 +8,6 @@ export const FrotasConteiner = styled.div`
   width: 100%;
 `;
 
-
 export const VeiculosPainel = styled.div`
   flex: 1;
   padding: 40px;
@@ -51,6 +50,7 @@ export const CartaoVeiculo = styled.div`
   border-radius: 12px;
   padding: 20px;
   transition: transform 0.3s, border-color 0.3s;
+  position: relative;
 
   &:hover {
     transform: translateY(-5px);
@@ -69,4 +69,21 @@ export const CartaoVeiculo = styled.div`
     }
   }
 `;
-  
+
+export const AcoesIcones = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 10px;
+
+  svg {
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+  }
+`;

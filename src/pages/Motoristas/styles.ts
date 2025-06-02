@@ -81,6 +81,7 @@ export const CartaoMotorista = styled.div`
   border-radius: 12px;
   padding: 20px;
   transition: transform 0.3s, border-color 0.3s;
+  position: relative;
 
   &:hover {
     transform: translateY(-5px);
@@ -96,6 +97,24 @@ export const CartaoMotorista = styled.div`
       font-weight: bold;
       font-size: 16px;
       color: #DE562C;
+    }
+  }
+`;
+
+export const AcoesIcones = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 10px;
+
+  svg {
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
     }
   }
 `;

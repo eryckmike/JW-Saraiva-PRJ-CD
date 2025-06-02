@@ -20,15 +20,15 @@ export const MotoristasContainer = styled.div`
 
 export const PainelMotoristas = styled.div`
   flex: 1;
-  padding: 60px 60px 40px; /* topo e laterais ajustados */
+  padding: 60px 60px 40px; 
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* alinhado à esquerda */
+  align-items: flex-start; 
 
   h2 {
     font-size: 26px;
     font-weight: 600;
-    margin-bottom: 32px; /* espaçamento entre o título e os campos */
+    margin-bottom: 32px; 
   }
 `;
 
