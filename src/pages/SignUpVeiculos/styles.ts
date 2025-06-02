@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export interface Veiculo {
+export interface Veiculos {
   placa: string;
   codigoVeiculo: string;
   cor: string;

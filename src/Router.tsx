@@ -12,7 +12,7 @@ import CadastroMotorista from "./pages/SignUpMotoristas";
 import CadastroVeiculo from "./pages/SignUpVeiculos"; 
 import { BarraLateralLayout } from "./layouts/BarraLateralFrotaLayout";
 import { BarraLateralMotoristaLayout } from "./layouts/BarraLateralLayoutMotoristas";
-import { PainelEntradasSaidas } from "./painel";
+import { PainelEntradasSaidas } from "./pages/painel";
 
 
 export function Router() {
