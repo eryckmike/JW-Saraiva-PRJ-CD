@@ -14,7 +14,9 @@ import { BarraLateralLayout } from "./layouts/BarraLateralFrotaLayout";
 import { BarraLateralMotoristaLayout } from "./layouts/BarraLateralLayoutMotoristas";
 import { PainelEntradasSaidas } from "./painel";
 import { PainelAbastecimentos } from "./pages/Abastecimentos";
-import { PainelMultas } from "./pages/Multas"; 
+import { PainelMultas } from "./pages/Multas";
+import { PainelManutencao } from "./pages/Manutençao";
+import { PainelViagens } from "./pages/Viagens"; 
 
 export function Router() {
   return (
@@ -33,7 +35,9 @@ export function Router() {
         <Route path="/frotas" element={<Frotas />} />
         <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
         <Route path="/abastecimentos" element={<PainelAbastecimentos />} />
-        <Route path="/multas" element={<PainelMultas />} /> 
+        <Route path="/multas" element={<PainelMultas />} />
+        <Route path="/manutencao" element={<PainelManutencao />} />
+        <Route path="/viagens" element={<PainelViagens />} />
       </Route>
 
       <Route path="/" element={<BarraLateralMotoristaLayout />}>
