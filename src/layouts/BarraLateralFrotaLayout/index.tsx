@@ -1,14 +1,18 @@
 import { Outlet } from "react-router-dom";
 import { LayoutContainer } from "./styles";
+import { BarraLateralFrota } from "../../components/Header";
 import { Header } from "../../components/Header/index.tsx";
 
-export function DefaultLayout() {
+export function BarraLateralLayout() {
   return (
-    <div>
-      <LayoutContainer>
+    <>
+      <div>
         <Header/>
+      </div>
+      <LayoutContainer>
+        <BarraLateralFrota/>
         <Outlet/>
       </LayoutContainer>
-    </div>
+    </>
   )
 }
