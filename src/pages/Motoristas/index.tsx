@@ -20,7 +20,6 @@ export function Motoristas() {
     { id: 6, nome: "José Raimundo", categoria: "D" },
   ]);
 
-  // Apenas um filtro simples local para o input de busca
   const motoristasFiltrados = motoristas.filter(m =>
     m.nome.toLowerCase().includes(busca.toLowerCase()) ||
     m.id.toString().includes(busca)
@@ -44,8 +43,7 @@ export function Motoristas() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      // Se quiser colocar algum comportamento ao apertar Enter, pode implementar aqui
-      // Por enquanto não faz nada (a busca é feita localmente no filtro)
+      
     }
   };
 

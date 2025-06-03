@@ -34,12 +34,14 @@ export function Router() {
         <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
         <Route path="/abastecimentos" element={<PainelAbastecimentos />} />
         <Route path="/multas" element={<PainelMultas />} /> 
+         <Route path="/entradas-saidas" element={<PainelEntradasSaidas />} />
       </Route>
 
       <Route path="/" element={<BarraLateralMotoristaLayout />}>
         <Route path="/motoristas" element={<Motoristas />} />
         <Route path="/cadastro-motorista" element={<CadastroMotorista />} />
         <Route path="/entradas-saidas" element={<PainelEntradasSaidas />} />
+        <Route path="/multas" element={<PainelMultas />} /> 
       </Route>
 
       <Route path="*" element={<h1>Página não encontrada</h1>} />

@@ -54,11 +54,16 @@ export function BarraLateralFrota() {
                       </li>
                       <li>Frotas</li>
                       <li>Viagens</li>
-                      <li>Entradas/Saídas</li>
+                      <li>
+            <NavLink to="/entradas-saidas" className={({ isActive }) => isActive ? "active" : ""}> Entradas/Saídas </NavLink> </li>
                       <li>Entradas/Saídas/CT's</li>
                       <li>Manutenções</li>
-                      <li>Abastecimentos</li>
-                      <li>Multas</li>
+                      <li><NavLink to="/Abastecimentos" className={({ isActive }) => isActive ? "active" : ""}>
+                        Abastecimentos
+                      </NavLink></li>
+                      <li><NavLink to="/Multas" className={({ isActive }) => isActive ? "active" : ""}>
+                        Multas
+                      </NavLink></li>
                       <li>
                       <NavLink to="/cadastro-veiculo" className={({ isActive }) => isActive ? "active" : ""}>
                         Cadastrar
@@ -86,7 +91,7 @@ export function BarraLateralMotorista() {
         <li>Entradas/Saídas/CT's</li>
         <li>Manutenções</li>
         <li>Abastecimentos</li>
-        <li>Multas</li>
+        <li> <NavLink to="/multas" className={({ isActive }) => isActive ? "active" : ""}> Multas </NavLink> </li>
         <li>
           <NavLink to="/cadastro-motorista" className={({ isActive }) => isActive ? "active" : ""}>
           Cadastrar
