@@ -52,10 +52,15 @@ export function BarraLateralFrota() {
                         Veículos
                       </NavLink>
                       </li>
-                      <li>Viagens</li>
+                      <li>
+            <NavLink to="/Viagens" className={({ isActive }) => isActive ? "active" : ""}> Viagens </NavLink> </li>
                       <li>
             <NavLink to="/entradas-saidas" className={({ isActive }) => isActive ? "active" : ""}> Entradas/Saídas </NavLink> </li>
-                      <li>Manutenções</li>
+                     <li>
+                      <NavLink to="/manutencao" className={({ isActive }) => isActive ? "active" : ""}>
+                        Manutenções
+                      </NavLink>
+                      </li>
                       <li><NavLink to="/Abastecimentos" className={({ isActive }) => isActive ? "active" : ""}>
                         Abastecimentos
                       </NavLink></li>
@@ -83,7 +88,8 @@ export function BarraLateralMotorista() {
             Motoristas
           </NavLink>
         </li>
-        <li>Viagens</li>
+        <li>
+            <NavLink to="/Viagens" className={({ isActive }) => isActive ? "active" : ""}> Viagens </NavLink> </li>
     
         <li>
           <NavLink to="/cadastro-motorista" className={({ isActive }) => isActive ? "active" : ""}>
