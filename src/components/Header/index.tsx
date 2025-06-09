@@ -89,9 +89,6 @@ export function BarraLateralMotorista() {
           </NavLink>
         </li>
         <li>
-            <NavLink to="/Viagens" className={({ isActive }) => isActive ? "active" : ""}> Viagens </NavLink> </li>
-    
-        <li>
           <NavLink to="/cadastro-motorista" className={({ isActive }) => isActive ? "active" : ""}>
           Cadastrar
           </NavLink>
