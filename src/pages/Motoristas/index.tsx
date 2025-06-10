@@ -43,8 +43,7 @@ export function Motoristas() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      // Aqui você pode implementar a lógica de busca se necessário
-      console.log("Buscar motoristas com:", busca);
+      
     }
   };
 
