@@ -1,8 +1,37 @@
-import { Link, NavLink } from "react-router-dom";
-import { HeaderConteiner, LogoWrapper, NavMenu, UserProfile, Divider, BarraLateral } from "./styles";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { HeaderConteiner, LogoWrapper, NavMenu, UserProfile, ProfileDropdown, DropdownItem, Divider, BarraLateral } from "./styles";
 import Logo from "../../assets/Logo.png";
+import { useState, useRef, useEffect } from 'react';
 
 export function Header() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    // Clear any stored user data
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    // Redirect to login page
+    navigate('/sign');
+  };
+
+  const handlePerfil = () => {
+    navigate('/perfil');
+    setIsDropdownOpen(false);
+  };
+
   return (
     <>
       <HeaderConteiner>
@@ -33,8 +62,22 @@ export function Header() {
           </NavLink>
         </NavMenu>
 
-        <UserProfile>
-          <img src={Logo} alt="Foto de perfil do usuário" />
+        <UserProfile ref={dropdownRef}>
+          <img 
+            src={Logo} 
+            alt="Foto de perfil do usuário" 
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          />
+          {isDropdownOpen && (
+            <ProfileDropdown>
+              <DropdownItem onClick={handlePerfil}>
+                Perfil
+              </DropdownItem>
+              <DropdownItem onClick={handleLogout}>
+                Sair
+              </DropdownItem>
+            </ProfileDropdown>
+          )}
         </UserProfile>
       </HeaderConteiner>
       
@@ -46,7 +89,8 @@ export function Header() {
 export function BarraLateralFrota() {
   return (
     <BarraLateral>
-                    <ul>
+                    <ul> 
+                    
                       <li>
                       <NavLink to="/frotas" className={({ isActive }) => isActive ? "active" : ""}>
                         Veículos
@@ -72,6 +116,7 @@ export function BarraLateralFrota() {
                         Cadastrar
                       </NavLink>
                       </li>
+                      
                     </ul>
     </BarraLateral>
 

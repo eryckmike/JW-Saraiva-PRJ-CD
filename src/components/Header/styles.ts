@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const HeaderConteiner = styled.header`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background: #E8EBED; /* Cinza claro */
   padding: 20px 40px;
   font-family: 'Poppins', sans-serif;
@@ -45,6 +45,9 @@ export const NavMenu = styled.nav`
 `;
 
 export const UserProfile = styled.div`
+  position: relative;
+  cursor: pointer;
+
   img {
     height: 40px;
     width: 40px;
@@ -55,6 +58,30 @@ export const UserProfile = styled.div`
     &:hover {
       border-color: #DE562C;
     }
+  }
+`;
+
+export const ProfileDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 1000;
+`;
+
+export const DropdownItem = styled.div`
+  padding: 0.75rem 1rem;
+  color: #7A8A96;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+    color: #DE562C;
   }
 `;
 

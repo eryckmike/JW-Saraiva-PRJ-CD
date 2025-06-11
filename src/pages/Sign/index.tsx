@@ -1,22 +1,113 @@
-import { FormGroup, Input, LoginConteiner, SignConteiner, TelaLogin, UserInfoLabel } from "./styles";
-import Logo from "../../assets/Logo.png";
-export function Sign(){
-    return(
-        <SignConteiner>
-            <TelaLogin>
-                <img src={Logo} alt="Logo JW Saraiva" />
-            </TelaLogin>
-            <LoginConteiner>
-                <FormGroup>
-                    <UserInfoLabel htmlFor="username">Digite seu usuário ou e-mail: </UserInfoLabel>
-                    <Input id="username" type="text" />
-                </FormGroup>
-                <FormGroup>
-                    <UserInfoLabel htmlFor="password">Digite sua senha:</UserInfoLabel>
-                    <Input id="password" type="password" />
-                </FormGroup>
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Logo from '../../assets/Logo.png';
+import {
+  SignContainer,
+  SignContent,
+  SignHeader,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  RememberMeGroup,
+  RememberMeLabel,
+  ForgotPasswordLink,
+  SubmitButton,
+  SignUpLink
+} from './styles';
+import styled from 'styled-components';
 
-            </LoginConteiner>
-        </SignConteiner>
-    )
+const LogoImg = styled.img`
+  width: 120px;
+  display: block;
+  margin: 0 auto 18px auto;
+  filter: drop-shadow(0 2px 8px #e8ebed);
+`;
+
+export function Sign() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      // Here you would typically make an API call to authenticate the user
+      console.log('Login data:', formData);
+      // Store user data based on remember me option
+      const storage = formData.rememberMe ? localStorage : sessionStorage;
+      storage.setItem('user', JSON.stringify({ email: formData.email }));
+      // Redirect to home page
+      window.location.href = '/';
+    } catch (error) {
+      alert('Erro ao fazer login. Verifique suas credenciais.');
+    }
+  };
+
+  return (
+    <SignContainer>
+      <SignContent>
+        <LogoImg src={Logo} alt="Logo Grupo JW Saraiva" />
+        <SignHeader>
+          <h1>Bem-vindo</h1>
+          <p>Faça login para acessar sua conta</p>
+        </SignHeader>
+        <Form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label htmlFor="email">E-mail</Label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+          </FormGroup>
+          <RememberMeGroup>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleInputChange}
+            />
+            <RememberMeLabel htmlFor="rememberMe">
+              Lembrar-se de mim
+            </RememberMeLabel>
+          </RememberMeGroup>
+          <ForgotPasswordLink to="/forgot-password">
+            Esqueceu sua senha?
+          </ForgotPasswordLink>
+          <SubmitButton type="submit">
+            Entrar
+          </SubmitButton>
+          <SignUpLink>
+            Não tem uma conta? <Link to="/signup">Cadastre-se</Link>
+          </SignUpLink>
+        </Form>
+      </SignContent>
+    </SignContainer>
+  );
 }
