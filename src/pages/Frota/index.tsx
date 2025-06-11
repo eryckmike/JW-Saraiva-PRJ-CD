@@ -116,14 +116,8 @@ export function Frotas() {
             veiculos.map((v) => (
               <CartaoVeiculo key={v.id}>
                 <AcoesIcones>
-                  <Pencil size={16} onClick={() => handleEdit(v)}
-                    style={{
-                      background: '#DE562C',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 4
-                    }} />
-                  <Trash2 size={16} onClick={() => handleDelete(v.id)} />
+                  <Pencil size={16} color="#E8EBED" onClick={() => handleEdit(v)} />
+                  <Trash2 size={16} color="#DE562C" onClick={() => handleDelete(v.id)} />
                 </AcoesIcones>
                 <p>{v.placa}</p>
                 <p>{v.categoria}</p>
