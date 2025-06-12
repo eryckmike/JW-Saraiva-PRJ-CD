@@ -109,30 +109,48 @@ export const Overlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: fadeIn 0.2s ease;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 `;
 
 export const ModalContainer = styled.div`
   background: #161b22;
   color: #E8EBED;
   border-radius: 12px;
-  padding: 32px;
+  padding: 24px;
   width: 90%;
-  max-width: 500px;
+  max-width: 420px;
   box-shadow: 0 4px 32px rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  animation: slideIn 0.2s ease;
+
+  @keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @media (max-width: 480px) {
+    width: 95%;
+    padding: 20px;
+  }
 `;
 
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 4px;
 
   h2 {
     margin: 0;
     color: #DE562C;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
   }
 
@@ -143,6 +161,7 @@ export const ModalHeader = styled.div`
     font-size: 1.25rem;
     cursor: pointer;
     transition: color 0.2s;
+    padding: 4px;
 
     &:hover {
       color: #E8EBED;
@@ -153,17 +172,17 @@ export const ModalHeader = styled.div`
 export const ModalForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
   label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
 
     input,
     select {
       margin-top: 4px;
       width: 100%;
-      padding: 8px;
+      padding: 6px 8px;
       border-radius: 6px;
       border: 1px solid #30363d;
       background: #0d1117;
@@ -183,16 +202,16 @@ export const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 12px;
 
   button {
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 6px;
     border: none;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: background 0.2s;
+    font-size: 0.85rem;
+    transition: all 0.2s;
 
     &.cancel {
       background: #30363d;

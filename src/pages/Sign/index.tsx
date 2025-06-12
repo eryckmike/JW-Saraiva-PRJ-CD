@@ -42,12 +42,12 @@ export function Sign() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      // Here you would typically make an API call to authenticate the user
+
       console.log('Login data:', formData);
-      // Store user data based on remember me option
+      // usa o db para lembrar 
       const storage = formData.rememberMe ? localStorage : sessionStorage;
       storage.setItem('user', JSON.stringify({ email: formData.email }));
-      // Redirect to home page
+      // Redirecio para home
       window.location.href = '/';
     } catch (error) {
       alert('Erro ao fazer login. Verifique suas credenciais.');
