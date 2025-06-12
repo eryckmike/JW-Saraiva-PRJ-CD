@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SignContainer } from './styles';
 
 export function Sign({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -28,11 +29,13 @@ export function Sign({ onLogin }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input value={email} onChange={e => setEmail(e.target.value)} placeholder="E-mail" />
-      <input value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" type="password" />
-      <button type="submit">Entrar</button>
-      {erro && <div style={{ color: 'red' }}>{erro}</div>}
-    </form>
+    <SignContainer>
+      <form onSubmit={handleSubmit}>
+        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="E-mail" />
+        <input value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" type="password" />
+        <button type="submit">Entrar</button>
+        {erro && <div style={{ color: 'red' }}>{erro}</div>}
+      </form>
+    </SignContainer>
   );
 }
