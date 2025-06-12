@@ -14,8 +14,36 @@ export const PainelMotoristas = styled.div`
   padding: 40px;
 `;
 
-export const BarraPesquisa = styled.div`
+/* wrapper para pesquisa + botão */
+export const MotoristasHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
+
+  button {
+    background: #DE562C;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button:hover {
+    background: #bf4523;
+  }
+`;
+
+export const BarraPesquisa = styled.div`
+  flex: 1;
 
   input {
     width: 100%;
