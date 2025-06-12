@@ -2,206 +2,125 @@ import styled from 'styled-components';
 
 export const AppContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #0c0f14;
+  color: #fff;
+  padding: 2rem;
   font-family: 'Poppins', sans-serif;
-  background: #0d1117;
-  color: #E8EBED;
-  min-height: 100vh;
 `;
 
-
-export const ContainerHome = styled.main`
+export const ContainerHome = styled.div`
   flex: 1;
   display: flex;
-  flex-direction: row;   
-  gap: 20px;
-  padding: 40px;
-  background-color: #0d1117;
-  font-family: 'Poppins', sans-serif;
-  color: #E8EBED;
-  min-height: 100vh;
+  gap: 2rem;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+  max-width: 1400px;
+  width: 100%;
+  /* Faz as colunas preencherem toda a altura restante */
+  align-items: stretch;
 `;
+
 export const ColunaEsquerda = styled.div`
-  flex: 2;
+  flex: 2;                /* aumenta proporção da esquerda */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  flex: none;
-  width: 65%;     
+  gap: 2rem;
+  /* Faz o painel interno esticar verticalmente */
+  align-items: stretch;
 `;
 
 export const ColunaDireita = styled.div`
-  flex: 1;
+  flex: 1;                /* mantém proporção 2:1 */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  flex: none;
-  width: 50%;
-  
+  gap: 2rem;
+  align-items: stretch;
 `;
 
-export const ContentWrapper = styled.div`
-  display: flex;
-  gap: 20px;
-  max-width: 1300px;    /* ou outro valor que preferir */
-  width: 100%;
-`;
-
-
-export const DashBoardTitulo = styled.h1`
-  color: #DE562C;
-  font-size: 22px;
-  margin-bottom: 12px;
-`;
-
-export const DashBoardPainelGest = styled.section`
-  background: #161b22;
-  padding: 32px 40px;
+const CardBase = styled.div`
+  background-color: #151a22;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #E8EBED;
-  text-align: center;
-  width: 100%;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  transition: border 0.3s ease;
+  font-family: 'Poppins', sans-serif;
   
-  
+  /* permite o card crescer para preencher o espaço */
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    border-color: #f4511e;
+  }
+`;
+
+export const DashBoardPainelGest = styled(CardBase)`
   h2 {
-    margin-bottom: 8px;
-    color: #DE562C;
-    font-weight: 600;
-    font-size: 20px;
-    text-align: left;
+    font-size: 1.5rem;
+    color: #f4511e;
+    margin-bottom: 1rem;
   }
 
   p {
-    font-size: 16px;
-    margin: 4px 0;
-    color: #E8EBED;
-    text-align: left;
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    flex-shrink: 0;
   }
 
   strong {
-    color: #E8EBED;
+    color: #fff;
   }
 `;
 
-const painelBase = `
-  background: #161b22;
-  padding: 20px 28px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #7A8A96;
-  width: 100%; /* Already set to 100% in your previous code */
-`;
+export const DashBoardPainelAusentes = styled(CardBase)`
+  h2 {
+    font-size: 1.3rem;
+    color: #f4511e;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
 
-export const DashBoardPainelAusentes = styled.section`
-  ${painelBase}
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-style: italic;
-  font-size: 15px;
-   ul {
+  ul {
     list-style: none;
-    padding: 0;
     margin: 0;
-    text-align: left;
-
-    li {
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #E8EBED;
-      span:first-child { font-weight: 600; }
-    }
-  }
-`;
-
-export const DashBoardPainelCirculacao = styled.section`
-  ${painelBase}
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-style: italic;
-  font-size: 15px;
-    ul {
-    list-style: none;
     padding: 0;
-    margin: 0;
-    text-align: left;
-
-    li {
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #E8EBED;
-   }
-  }
-`;
-
-export const MotoristasConteiner = styled.div`
-  display: flex;
-  font-family: 'Poppins', sans-serif;
-  background: #0d1117;
-  color: #E8EBED;
-  min-height: 100vh;
-`;
-
-export const PainelMotoristas = styled.div`
-  flex: 1;
-  padding: 40px;
-`;
-
-export const BarraPesquisa = styled.div`
-  margin-bottom: 30px;
-
-  input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    background: #0d1117;
-    color: #E8EBED;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-
-    &::placeholder {
-      color: #7A8A96;
-    }
-
-    &:focus {
-      border-color: #DE562C;
-      box-shadow: 0 0 0 3px rgba(222, 86, 44, 0.3);
-    }
-  }
-`;
-
-export const GradeMotoristas = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-`;
-
-export const CartaoMotorista = styled.div`
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 12px;
-  padding: 20px;
-  transition: transform 0.3s, border-color 0.3s;
-
-  &:hover {
-    transform: translateY(-5px);
-    border-color: #DE562C;
+    flex: 1; /* faz a lista ocupar o resto do card */
+    overflow-y: auto;
   }
 
-  p {
-    margin: 0 0 8px 0;
-    font-size: 14px;
-    color: #E8EBED;
-
-    &:first-child {
+  li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    
+    span {
       font-weight: bold;
-      font-size: 16px;
-      color: #DE562C;
+      color: #E8EBED;
     }
+  }
+`;
+
+export const DashBoardPainelCirculacao = styled(CardBase)`
+  h2 {
+    font-size: 1.3rem;
+    color: #f4511e;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #E8EBED;
   }
 `;
