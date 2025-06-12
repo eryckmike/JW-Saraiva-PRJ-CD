@@ -80,10 +80,16 @@ export const BotaoNovaViagem = styled.button`
   margin-bottom: 1.5rem;
   padding: 0.75rem 1.25rem;
   border: none;
-  background-color: #4caf50;
+  background-color: #DE562C;
   color: white;
   border-radius: 0.5rem;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+  &:hover {
+    background-color: #bf4523;
+  }
 `;
 
 // Layout do formulário dentro do modal
@@ -109,7 +115,7 @@ export const CampoForm = styled.div`
   }
 `;
 
-// Container para os botões “Cancelar” e “Salvar”
+// Container para os botões "Cancelar" e "Salvar"
 export const AcoesModal = styled.div`
   display: flex;
   justify-content: flex-end;

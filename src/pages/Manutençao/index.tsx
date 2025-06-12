@@ -3,7 +3,8 @@ import { Modal } from '../../components/Header/Modal'
 import {
   PainelContainer, PainelTitle,
   ListaManutencoes, CartaoManutencao,
-  LinhaInfo, Coluna
+  LinhaInfo, Coluna,
+  BotaoNovaManutencao
 } from './style'
 
 interface VeiculoDTO {
@@ -130,9 +131,9 @@ function handleSubmit(e: FormEvent) {
   return (
     <PainelContainer>
       <PainelTitle>Manutenções</PainelTitle>
-      <button onClick={openModal} style={{ marginBottom: 16, padding: '8px 16px' }}>
+      <BotaoNovaManutencao onClick={openModal}>
          Nova Manutenção
-      </button>
+      </BotaoNovaManutencao>
 
       <ListaManutencoes>
         {manut.map(r => (
@@ -157,52 +158,67 @@ function handleSubmit(e: FormEvent) {
         ))}
       </ListaManutencoes>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-    <label>
-      Data Entrada
-      <input
-        type="datetime-local"
-        value={form.dataEntrada}
-        onChange={e => setForm(f => ({ ...f, dataEntrada: e.target.value }))}
-        required
-      />
-    </label>
-    <label>
-      Data Saída Estimada
-      <input
-        type="datetime-local"
-        value={form.dataSaidaEstimad}
-        onChange={e => setForm(f => ({ ...f, dataSaidaEstimad: e.target.value }))}
-      />
-    </label>
-    <label>
-      Motivo
-      <input
-        type="text"
-        value={form.motivo}
-        onChange={e => setForm(f => ({ ...f, motivo: e.target.value }))}
-        required
-      />
-    </label>
-    <label>
-      Veículo
-      <select
-        value={form.veiculoId}
-        onChange={e => setForm(f => ({ ...f, veiculoId: e.target.value }))}
-        required
-      >
-        <option value="">Selecione...</option>
-        {veiculos.map(v => (
-          <option key={v.id} value={v.id}>{v.label}</option>
-        ))}
-      </select>
-    </label>
-    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-      <button type="button" onClick={closeModal}>Cancelar</button>
-      <button type="submit">Salvar</button>
-    </div>
-  </form>
-</Modal>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              background: '#161b22',
+              color: '#E8EBED',
+              borderRadius: 16,
+              padding: 32,
+              minWidth: 340,
+              boxShadow: '0 4px 32px #0008',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 20,
+              maxWidth: 420,
+            }}
+          >
+            <h2 style={{margin:0, marginBottom: 16, color:'#DE562C', fontWeight:600, fontSize:22}}>Nova Manutenção</h2>
+            <label style={{fontWeight:500, fontSize:15, marginBottom: 4}}>Data Entrada:
+              <input
+                type="datetime-local"
+                value={form.dataEntrada}
+                onChange={e => setForm(f => ({ ...f, dataEntrada: e.target.value }))}
+                required
+                style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }}
+              />
+            </label>
+            <label style={{fontWeight:500, fontSize:15, marginBottom: 4}}>Data Saída Estimada:
+              <input
+                type="datetime-local"
+                value={form.dataSaidaEstimad}
+                onChange={e => setForm(f => ({ ...f, dataSaidaEstimad: e.target.value }))}
+                style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }}
+              />
+            </label>
+            <label style={{fontWeight:500, fontSize:15, marginBottom: 4}}>Motivo:
+              <input
+                type="text"
+                value={form.motivo}
+                onChange={e => setForm(f => ({ ...f, motivo: e.target.value }))}
+                required
+                style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }}
+              />
+            </label>
+            <label style={{fontWeight:500, fontSize:15, marginBottom: 4}}>Veículo:
+              <select
+                value={form.veiculoId}
+                onChange={e => setForm(f => ({ ...f, veiculoId: e.target.value }))}
+                required
+                style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }}
+              >
+                <option value="">Selecione...</option>
+                {veiculos.map(v => (
+                  <option key={v.id} value={v.id}>{v.label}</option>
+                ))}
+              </select>
+            </label>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+              <button type="button" onClick={closeModal} style={{ background: '#30363d', color: '#E8EBED', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 500, fontSize: 15, cursor: 'pointer' }}>Cancelar</button>
+              <button type="submit" style={{ background: '#DE562C', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, fontSize: 15, cursor: 'pointer', boxShadow: '0 2px 8px #de562c22' }}>Salvar</button>
+            </div>
+          </form>
+        </Modal>
 
     </PainelContainer>
   )

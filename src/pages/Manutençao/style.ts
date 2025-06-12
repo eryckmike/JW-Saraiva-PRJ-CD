@@ -98,3 +98,19 @@ export const Aviso = styled.div`
     }
   }
 `;
+
+export const BotaoNovaManutencao = styled.button`
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background-color: #DE562C;
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+  &:hover {
+    background-color: #bf4523;
+  }
+`;
