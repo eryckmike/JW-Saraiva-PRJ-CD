@@ -1,18 +1,18 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { Modal } from "../../components/Header/Modal";
-
 import {
   PainelContainer,
-  PainelHeader,
   PainelTitle,
-  BotaoNovaViagem,
   ListaViagens,
   CartaoViagem,
   LinhaInfo,
   Coluna,
+  BotaoNovaViagem,
   CampoForm,
-  AcoesModal
+  AcoesModal,
+  AcoesIcones
 } from "./style";
+import { Trash2 } from "lucide-react";
 
 interface RegistroViagem {
   id: number;
@@ -26,23 +26,26 @@ interface RegistroViagem {
 }
 
 export function PainelViagens() {
+  const BASE_URL = "http://localhost:3000/viagens";
+
+  // estados
   const [viagens, setViagens] = useState<RegistroViagem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [motoristas, setMotoristas] = useState<{ id: number; label: string }[]>([]);
-  const [veiculos, setVeiculos] = useState<{ id: number; label: string }[]>([]);
+  const [veiculos,   setVeiculos]   = useState<{ id: number; label: string }[]>([]);
   const [form, setForm] = useState({
-    dataSaida: "",
-    dataVolta: "",
+    dataSaida:   "",
+    dataVolta:   "",
     motoristaId: "",
-    veiculoId: "",
-    origem: "",
-    destino: ""
+    veiculoId:   "",
+    origem:      "",
+    destino:     ""
   });
 
-  const BASE_URL = "http://localhost:3000";
-
+  // 1) carrega viagens, motoristas e veículos
   useEffect(() => {
-    fetch(`${BASE_URL}/viagens`)
+    fetch(BASE_URL)
       .then(res => res.json())
       .then((data: any[]) => {
         const registros = data.map(item => ({
@@ -56,17 +59,25 @@ export function PainelViagens() {
           codigoVeiculo: item.veiculo.codigo
         }));
         setViagens(registros);
-      });
+      })
+      .catch(console.error);
 
-    fetch(`${BASE_URL}/motoristas`)
+    fetch("http://localhost:3000/motoristas")
       .then(res => res.json())
-      .then(data => setMotoristas(data.map(m => ({ id: m.id, label: m.nome }))));
+      .then((data: any[]) =>
+        setMotoristas(data.map(m => ({ id: m.id, label: m.nome })))
+      )
+      .catch(console.error);
 
-    fetch(`${BASE_URL}/veiculos`)
+    fetch("http://localhost:3000/veiculos")
       .then(res => res.json())
-      .then(data => setVeiculos(data.map(v => ({ id: v.id, label: `${v.codigo} – ${v.placa}` }))));
+      .then((data: any[]) =>
+        setVeiculos(data.map(v => ({ id: v.id, label: `${v.codigo} – ${v.placa}` })))
+      )
+      .catch(console.error);
   }, []);
 
+  // 2) abrir/fechar modal
   function openModal() {
     setForm({ dataSaida: "", dataVolta: "", motoristaId: "", veiculoId: "", origem: "", destino: "" });
     setIsModalOpen(true);
@@ -75,45 +86,64 @@ export function PainelViagens() {
     setIsModalOpen(false);
   }
 
+  // 3) criar nova viagem
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    fetch(`${BASE_URL}/viagens`, {
+    fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        dataSaida: form.dataSaida,
-        dataVolta: form.dataVolta || null,
+        dataSaida:   form.dataSaida,
+        dataVolta:   form.dataVolta || null,
         motoristaId: Number(form.motoristaId),
-        veiculoId: Number(form.veiculoId),
-        origem: form.origem,
-        destino: form.destino
+        veiculoId:   Number(form.veiculoId),
+        origem:      form.origem,
+        destino:     form.destino
       })
     })
       .then(res => {
         if (!res.ok) throw new Error("Falha ao criar viagem");
+        return res.json();
+      })
+      .then(() => {
         closeModal();
-        return fetch(`${BASE_URL}/viagens`);
+        return fetch(BASE_URL);
       })
       .then(res => res.json())
-      .then(data => setViagens(data.map(item => ({
-        id: item.id,
-        dataSaida: new Date(item.dataSaida).toLocaleDateString(),
-        dataVolta: new Date(item.dataVolta).toLocaleDateString(),
-        motorista: item.motorista.nome,
-        origem: item.origem,
-        destino: item.destino,
-        veiculo: item.veiculo.nome,
-        codigoVeiculo: item.veiculo.codigo
-      }))))
+      .then((data: any[]) => {
+        const registros = data.map(item => ({
+          id: item.id,
+          dataSaida: new Date(item.dataSaida).toLocaleDateString(),
+          dataVolta: new Date(item.dataVolta).toLocaleDateString(),
+          motorista: item.motorista.nome,
+          origem: item.origem,
+          destino: item.destino,
+          veiculo: item.veiculo.nome,
+          codigoVeiculo: item.veiculo.codigo
+        }));
+        setViagens(registros);
+      })
       .catch(console.error);
+  }
+
+  // 4) apagar viagem
+  async function handleDelete(id: number) {
+    try {
+      const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        console.error("Erro ao deletar viagem, status:", res.status);
+        return;
+      }
+      setViagens(prev => prev.filter(v => v.id !== id));
+    } catch (err) {
+      console.error("Erro ao deletar viagem:", err);
+    }
   }
 
   return (
     <PainelContainer>
-      <PainelHeader>
-        <PainelTitle>Viagens</PainelTitle>
-        <BotaoNovaViagem onClick={openModal}>Nova Viagem</BotaoNovaViagem>
-      </PainelHeader>
+      <PainelTitle>Viagens</PainelTitle>
+      <BotaoNovaViagem onClick={openModal}>Nova Viagem</BotaoNovaViagem>
 
       <ListaViagens>
         {viagens.map(registro => (
@@ -148,9 +178,20 @@ export function PainelViagens() {
             </LinhaInfo>
 
             <LinhaInfo>
-              <Coluna style={{ width: "100%" }}>
+              <Coluna>
                 <span>Código do Caminhão</span>
                 {registro.codigoVeiculo}
+              </Coluna>
+              {/* ícones de ação */}
+              <Coluna style={{ display: "flex", justifyContent: "flex-end" }}>
+                <AcoesIcones>
+                  <Trash2
+                    size={16}
+                    color="#DE562C"
+                    onClick={() => handleDelete(registro.id)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </AcoesIcones>
               </Coluna>
             </LinhaInfo>
           </CartaoViagem>
@@ -164,13 +205,14 @@ export function PainelViagens() {
           borderRadius: 16,
           padding: 32,
           minWidth: 340,
-          maxWidth: 420,
           boxShadow: '0 4px 32px #0008',
           display: 'flex',
           flexDirection: 'column',
-          gap: 20
+          gap: 20,
+          maxWidth: 420,
         }}>
-          <h2 style={{ margin: 0, marginBottom: 16, color: '#DE562C', fontWeight: 600, fontSize: 22 }}>Nova Viagem</h2>
+          <h2 style={{ margin:0, marginBottom:16, color:'#DE562C', fontWeight:600, fontSize:22 }}>Nova Viagem</h2>
+
           <CampoForm>
             <label>Data Saída</label>
             <input
@@ -180,6 +222,7 @@ export function PainelViagens() {
               required
             />
           </CampoForm>
+
           <CampoForm>
             <label>Data Volta</label>
             <input
@@ -188,6 +231,7 @@ export function PainelViagens() {
               onChange={e => setForm(f => ({ ...f, dataVolta: e.target.value }))}
             />
           </CampoForm>
+
           <CampoForm>
             <label>Motorista</label>
             <select
@@ -201,6 +245,7 @@ export function PainelViagens() {
               ))}
             </select>
           </CampoForm>
+
           <CampoForm>
             <label>Veículo</label>
             <select
@@ -214,6 +259,7 @@ export function PainelViagens() {
               ))}
             </select>
           </CampoForm>
+
           <CampoForm>
             <label>Origem</label>
             <input
@@ -223,6 +269,7 @@ export function PainelViagens() {
               required
             />
           </CampoForm>
+
           <CampoForm>
             <label>Destino</label>
             <input
@@ -232,10 +279,12 @@ export function PainelViagens() {
               required
             />
           </CampoForm>
+
           <AcoesModal>
             <button type="button" onClick={closeModal}>Cancelar</button>
             <button type="submit">Salvar</button>
           </AcoesModal>
+
         </form>
       </Modal>
     </PainelContainer>

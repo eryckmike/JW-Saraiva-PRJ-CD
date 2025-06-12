@@ -1,67 +1,71 @@
-import React, { useState } from 'react';
-import Logo from "../../assets/Logo.png"
-import { SignUpConteiner } from './styles';
+import { useState, FormEvent } from 'react';
+import { SignContainer, SignContent } from '../Sign/styles';
+import Logo from '../../assets/Logo.png';
 
-interface SignUpFormData {
-  name: string;
-  email: string;
-  password: string;
+interface SignUpProps {
+  onSuccess?: () => void;
 }
 
-export function SignUp() {
-  const [formData, setFormData] = useState<SignUpFormData>({
-    name: '',
-    email: '',
-    password: '',
-  });
+export function SignUp({ onSuccess }: SignUpProps) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [erro, setErro] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log('Dados cadastrados:', formData);
-    // adicionar aqui o ip-numerico certo que vocês vao usar
-  };
+    setErro('');
+    try {
+      const res = await fetch('http://localhost:3000/auth/signup',{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErro(data.error || 'Erro ao cadastrar');
+        return;
+      }
+      onSuccess && onSuccess();
+    } catch (err) {
+      setErro('Erro de conexão');
+    }
+  }
 
-  //  caso forem adicionar mais alguma coisa copiar o de cima e mudar o nome 
   return (
-    <SignUpConteiner>
-      <form onSubmit={handleSubmit}>
-        <img src={Logo} alt="Logo" />
-        <h1>Cadastro</h1>
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-       
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Senha"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Cadastro</button>
-      </form>
-    </SignUpConteiner>
+    <SignContainer>
+      <SignContent>
+        <img src={Logo} alt="Logo JW Saraiva" style={{ width: 80, margin: '0 auto 18px', display: 'block' }} />
+        <h1>Crie sua conta</h1>
+        <p style={{ textAlign: 'center', color: '#555', marginBottom: 24 }}>Preencha os dados para se cadastrar</p>
+        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Nome"
+            required
+            style={{ padding: 12, borderRadius: 10, border: '1px solid #ccc', fontSize: 16, marginBottom: 12 }}
+          />
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="E-mail"
+            type="email"
+            required
+            style={{ padding: 12, borderRadius: 10, border: '1px solid #ccc', fontSize: 16, marginBottom: 12 }}
+          />
+          <input
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Senha"
+            type="password"
+            required
+            style={{ padding: 12, borderRadius: 10, border: '1px solid #ccc', fontSize: 16, marginBottom: 12 }}
+          />
+          <button type="submit" style={{ padding: 12, background: '#DE562C', color: '#fff', border: 'none', borderRadius: 10, fontSize: 16, fontWeight: 600, cursor: 'pointer', marginTop: 8 }}>Cadastrar</button>
+          {erro && <div style={{ color: 'red', marginTop: 8, textAlign: 'center' }}>{erro}</div>}
+        </form>
+      </SignContent>
+    </SignContainer>
   );
 }

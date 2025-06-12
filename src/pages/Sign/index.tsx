@@ -1,112 +1,64 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, FormEvent } from 'react';
+import { SignContainer, SignContent } from './styles';
 import Logo from '../../assets/Logo.png';
-import {
-  SignContainer,
-  SignContent,
-  SignHeader,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  RememberMeGroup,
-  RememberMeLabel,
-  ForgotPasswordLink,
-  SubmitButton,
-  SignUpLink
-} from './styles';
-import styled from 'styled-components';
 
-const LogoImg = styled.img`
-  width: 120px;
-  display: block;
-  margin: 0 auto 18px auto;
-  filter: drop-shadow(0 2px 8px #e8ebed);
-`;
+interface SignProps {
+  onLogin?: () => void;
+}
 
-export function Sign() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  });
+export function Sign({ onLogin }: SignProps) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [erro, setErro] = useState('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErro('');
     try {
-
-      console.log('Login data:', formData);
-      // usa o db para lembrar 
-      const storage = formData.rememberMe ? localStorage : sessionStorage;
-      storage.setItem('user', JSON.stringify({ email: formData.email }));
-      // Redirecio para home
-      window.location.href = '/';
-    } catch (error) {
-      alert('Erro ao fazer login. Verifique suas credenciais.');
+      const res = await fetch('http://localhost:3000/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErro(data.error || 'Erro ao autenticar');
+        return;
+      }
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      onLogin && onLogin();
+    } catch (err) {
+      setErro('Erro de conexão');
     }
-  };
+  }
 
   return (
     <SignContainer>
       <SignContent>
-        <LogoImg src={Logo} alt="Logo Grupo JW Saraiva" />
-        <SignHeader>
-          <h1>Bem-vindo</h1>
-          <p>Faça login para acessar sua conta</p>
-        </SignHeader>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
-          </FormGroup>
-          <RememberMeGroup>
-            <input
-              type="checkbox"
-              id="rememberMe"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleInputChange}
-            />
-            <RememberMeLabel htmlFor="rememberMe">
-              Lembrar-se de mim
-            </RememberMeLabel>
-          </RememberMeGroup>
-          <ForgotPasswordLink to="/forgot-password">
-            Esqueceu sua senha?
-          </ForgotPasswordLink>
-          <SubmitButton type="submit">
-            Entrar
-          </SubmitButton>
-          <SignUpLink>
-            Não tem uma conta? <Link to="/signup">Cadastre-se</Link>
-          </SignUpLink>
-        </Form>
+        <img src={Logo} alt="Logo JW Saraiva" style={{ width: 80, margin: '0 auto 18px', display: 'block' }} />
+        <h1>Bem-vindo</h1>
+        <p style={{ textAlign: 'center', color: '#555', marginBottom: 24 }}>Faça login para acessar sua conta</p>
+        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="E-mail"
+            type="email"
+            required
+            style={{ padding: 12, borderRadius: 10, border: '1px solid #ccc', fontSize: 16, marginBottom: 12 }}
+          />
+          <input
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Senha"
+            type="password"
+            required
+            style={{ padding: 12, borderRadius: 10, border: '1px solid #ccc', fontSize: 16, marginBottom: 12 }}
+          />
+          <button type="submit" style={{ padding: 12, background: '#DE562C', color: '#fff', border: 'none', borderRadius: 10, fontSize: 16, fontWeight: 600, cursor: 'pointer', marginTop: 8 }}>Entrar</button>
+          {erro && <div style={{ color: 'red', marginTop: 8, textAlign: 'center' }}>{erro}</div>}
+        </form>
       </SignContent>
     </SignContainer>
   );

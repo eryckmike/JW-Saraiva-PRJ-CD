@@ -1,103 +1,140 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, useEffect } from 'react';
+import { Modal } from '../../components/Header/Modal';
 import {
   MotoristasContainer,
   PainelMotoristas,
-  MotoristasHeader,
   BarraPesquisa,
   GradeMotoristas,
   CartaoMotorista,
-  AcoesIcones,
-  Overlay,
-  ModalContainer,
-  ModalHeader,
-  ModalForm,
-  ModalActions
-} from "./styles";
-import { Pencil, Trash2, Plus } from "lucide-react";
+  AcoesIcones
+} from './styles';
+import { Pencil, Trash2 } from 'lucide-react';
 
-interface Motorista {
+interface MotoristaDTO {
   id: number;
   nome: string;
-  categoria: string;
+  cpf: string;
+  cnh: string;
+  telefone: string;
+  email: string;
 }
 
 export function Motoristas() {
-  const [busca, setBusca] = useState("");
-  const [motoristas, setMotoristas] = useState<Motorista[]>([
-    { id: 1, nome: "Nicole Bahls", categoria: "A" },
-    { id: 2, nome: "João Pedro", categoria: "D" },
-    { id: 3, nome: "Maria Clara", categoria: "B" },
-    { id: 4, nome: "Carlos Silva", categoria: "C" },
-    { id: 5, nome: "Fernanda Souza", categoria: "E" },
-    { id: 6, nome: "José Raimundo", categoria: "D" }
-  ]);
+  const BASE_URL = 'http://localhost:3000/motoristas';
 
-  const [isAdding, setIsAdding] = useState(false);
-  const [newNome, setNewNome] = useState("");
-  const [newCat, setNewCat] = useState("");
+  // Estados
+  const [motoristas, setMotoristas]               = useState<MotoristaDTO[]>([]);
+  const [filtro, setFiltro]                       = useState('');
+  const [isModalOpen, setIsModalOpen]             = useState(false);
+  const [motoristaEditando, setMotoristaEditando] = useState<MotoristaDTO | null>(null);
+  const [formData, setFormData] = useState({
+    nome:     '',
+    cpf:      '',
+    cnh:      '',
+    telefone: '',
+    email:    ''
+  });
 
-  const motoristasFiltrados = motoristas.filter(
-    m =>
-      m.nome.toLowerCase().includes(busca.toLowerCase()) ||
-      m.id.toString().includes(busca)
+  // 1) Carrega a lista ao montar
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(BASE_URL);
+        if (!res.ok) throw new Error('Erro ao buscar motoristas');
+        const data = (await res.json()) as MotoristaDTO[];
+        setMotoristas(data);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  // 2) Filtra localmente
+  const motoristasFiltrados = motoristas.filter(m =>
+    m.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+    m.id.toString().includes(filtro)
   );
 
-  const deletarMotorista = (id: number) =>
-    setMotoristas(prev => prev.filter(m => m.id !== id));
-
-  const editarMotorista = (id: number) => {
-    const novoNome = prompt("Digite o novo nome do motorista:");
-    const novaCategoria = prompt("Digite a nova categoria:");
-    if (novoNome && novaCategoria) {
-      setMotoristas(prev =>
-        prev.map(m =>
-          m.id === id
-            ? { ...m, nome: novoNome, categoria: novaCategoria.toUpperCase() }
-            : m
-        )
-      );
+  // 3) Deleta no servidor e atualiza o state
+// Substitua seu handleDelete atual por este:
+    async function handleDelete(id: number) {
+      try {
+        const res = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
+        if (!res.ok) {
+          console.error('Erro ao deletar motorista, status:', res.status);
+          return;
+        }
+        // se chegamos aqui, deu certo
+        setMotoristas(prev => prev.filter(m => m.id !== id));
+      } catch (err) {
+        console.error('Erro ao deletar motorista:', err);
+      }
     }
-  };
 
-  function handleAddSubmit(e: FormEvent) {
+  // 4) Prepara e abre o modal para edição
+  function handleEdit(m: MotoristaDTO) {
+    setMotoristaEditando(m);
+    setFormData({
+      nome:     m.nome,
+      cpf:      m.cpf,
+      cnh:      m.cnh,
+      telefone: m.telefone,
+      email:    m.email
+    });
+    setIsModalOpen(true);
+  }
+
+  // 5) Envia PUT ao servidor e atualiza o state
+  async function onSubmitEdit(e: React.FormEvent) {
     e.preventDefault();
-    const nextId = Math.max(0, ...motoristas.map(m => m.id)) + 1;
-    setMotoristas(prev => [
-      ...prev,
-      { id: nextId, nome: newNome, categoria: newCat.toUpperCase() }
-    ]);
-    setIsAdding(false);
-    setNewNome("");
-    setNewCat("");
+    if (!motoristaEditando) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}/${motoristaEditando.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (!res.ok) throw new Error('Falha ao atualizar motorista');
+
+      const atualizado = (await res.json()) as MotoristaDTO;
+      setMotoristas(prev =>
+        prev.map(m => (m.id === atualizado.id ? atualizado : m))
+      );
+      setIsModalOpen(false);
+      setMotoristaEditando(null);
+    } catch (err) {
+      console.error('Erro ao atualizar motorista:', err);
+    }
   }
 
   return (
     <MotoristasContainer>
       <PainelMotoristas>
-        <MotoristasHeader>
-          <BarraPesquisa>
-            <input
-              type="text"
-              placeholder="Nome / Cod. Motorista"
-              value={busca}
-              onChange={e => setBusca(e.target.value)}
-            />
-          </BarraPesquisa>
-          <button onClick={() => setIsAdding(true)}>
-            <Plus size={18} />
-          </button>
-        </MotoristasHeader>
+        {/* campo de busca */}
+        <BarraPesquisa>
+          <input
+            type="text"
+            placeholder="Buscar motorista…"
+            value={filtro}
+            onChange={e => setFiltro(e.target.value)}
+          />
+        </BarraPesquisa>
 
+        {/* grid de cartões */}
         <GradeMotoristas>
           {motoristasFiltrados.length > 0 ? (
             motoristasFiltrados.map(m => (
               <CartaoMotorista key={m.id}>
+                <p><strong>{m.nome}</strong></p>
+                <p>CPF: {m.cpf}</p>
+                <p>CNH: {m.cnh}</p>
+                <p>Telefone: {m.telefone}</p>
+                <p>Email: {m.email}</p>
                 <AcoesIcones>
-                  <Pencil size={18} color="#E8EBED" onClick={() => editarMotorista(m.id)} />
-                  <Trash2 size={18} color="#DE562C" onClick={() => deletarMotorista(m.id)} />
+                  <Pencil  size={16} onClick={() => handleEdit(m)} />
+                  <Trash2 size={16} onClick={() => handleDelete(m.id)} />
                 </AcoesIcones>
-                <p>{m.nome}</p>
-                <p>Categoria {m.categoria}</p>
               </CartaoMotorista>
             ))
           ) : (
@@ -106,52 +143,57 @@ export function Motoristas() {
         </GradeMotoristas>
       </PainelMotoristas>
 
-      {isAdding && (
-        <Overlay>
-          <ModalContainer>
-            <ModalHeader>
-              <h2>Novo Motorista</h2>
-              <button onClick={() => setIsAdding(false)}>×</button>
-            </ModalHeader>
-            <ModalForm onSubmit={handleAddSubmit}>
-              <label>
-                Nome
-                <input
-                  value={newNome}
-                  onChange={e => setNewNome(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Categoria
-                <select
-                  value={newCat}
-                  onChange={e => setNewCat(e.target.value)}
-                  required
-                >
-                  <option value="">Selecione...</option>
-                  {["A", "B", "C", "D", "E"].map(c => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <ModalActions>
-                <button
-                  type="button"
-                  className="cancel"
-                  onClick={() => setIsAdding(false)}
-                >
-                  Cancelar
-                </button>
-                <button type="submit" className="save">
-                  Salvar
-                </button>
-              </ModalActions>
-            </ModalForm>
-          </ModalContainer>
-        </Overlay>
+      {/* modal de edição */}
+      {isModalOpen && motoristaEditando && (
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <h2>Editar Motorista</h2>
+          <form
+            onSubmit={onSubmitEdit}
+            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+          >
+            <label>
+              Nome:
+              <input
+                value={formData.nome}
+                onChange={e => setFormData(f => ({ ...f, nome: e.target.value }))}
+              />
+            </label>
+            <label>
+              CPF:
+              <input
+                value={formData.cpf}
+                onChange={e => setFormData(f => ({ ...f, cpf: e.target.value }))}
+              />
+            </label>
+            <label>
+              CNH:
+              <input
+                value={formData.cnh}
+                onChange={e => setFormData(f => ({ ...f, cnh: e.target.value }))}
+              />
+            </label>
+            <label>
+              Telefone:
+              <input
+                value={formData.telefone}
+                onChange={e => setFormData(f => ({ ...f, telefone: e.target.value }))}
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                value={formData.email}
+                onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
+              />
+            </label>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button type="button" onClick={() => setIsModalOpen(false)}>
+                Cancelar
+              </button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </Modal>
       )}
     </MotoristasContainer>
   );
