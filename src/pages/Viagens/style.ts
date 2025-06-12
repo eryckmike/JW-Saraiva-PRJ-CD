@@ -73,8 +73,6 @@ export const Coluna = styled.div`
   font-weight: 500;
 `;
 
-import styled from "styled-components";
-
 // Botão que abre o modal
 export const BotaoNovaViagem = styled.button`
   margin-bottom: 1.5rem;
@@ -115,6 +113,12 @@ export const CampoForm = styled.div`
   }
 `;
 
+export const AcoesIcones = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+`;
 // Container para os botões "Cancelar" e "Salvar"
 export const AcoesModal = styled.div`
   display: flex;

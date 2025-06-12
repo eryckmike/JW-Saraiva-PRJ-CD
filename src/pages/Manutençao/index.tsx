@@ -59,8 +59,8 @@ const [form, setForm] = useState({
             dataEntrada:      new Date(m.dataEntrada).toLocaleDateString(),
             dataSaidaEstimad: new Date(m.dataSaidaEstimad).toLocaleDateString(),
             motivo:           m.motivo,
-            veiculoNome:      m.veiculo.nome,
-            veiculoCodigo:    m.veiculo.codigo,
+            veiculoNome:      m.veiculo.placa,
+            veiculoCodigo:    String(m.veiculo.id),
             veiculoPlaca:     m.veiculo.placa
           }))
         )
@@ -119,8 +119,8 @@ function handleSubmit(e: FormEvent) {
                             ? new Date(m.dataSaidaEstimad).toLocaleDateString()
                             : '-',
         motivo:           m.motivo,
-        veiculoNome:      m.veiculo.nome,
-        veiculoCodigo:    m.veiculo.codigo,
+        veiculoNome:      m.veiculo.placa,
+        veiculoCodigo:    String(m.veiculo.id),
         veiculoPlaca:     m.veiculo.placa
       })))
     })

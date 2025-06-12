@@ -1,7 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { SignLayout } from "./layouts/SignLayout";
-
+import { Navigate } from 'react-router-dom';
+import { ReactNode } from "react";
 import { Home } from "./pages/Home";
 import { Frotas } from "./pages/Frota";
 import { Motoristas } from "./pages/Motoristas";
@@ -18,20 +19,27 @@ import { PainelMultas } from "./pages/Multas";
 import { PainelManutencoes } from "./pages/Manutençao";
 import { PainelViagens } from "./pages/Viagens"; 
 
+
+function PrivateRoute({ children }: { children: ReactNode }) {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/sign" replace />;
+}
+
 export function Router() {
   return (
     <Routes>
-      <Route path="/" element={<DefaultLayout />}>
+      <Route path="/" element={<PrivateRoute><DefaultLayout /></PrivateRoute>}>
         <Route path="/" element={<Home />} />
+        <Route path="/perfil" element={<Perfil/>} />
       </Route>
 
       <Route path="/" element={<SignLayout />}>
-        <Route path="/sign" element={<Sign />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/sign" element={<Sign onLogin={() => window.location.href = '/'} />} />
+        <Route path="/signup" element={<SignUp onSuccess={() => window.location.href = '/signin'} />} />
+        
       </Route>
 
-      <Route path="/" element={<BarraLateralLayout />}>
+      <Route path="/" element={<PrivateRoute><BarraLateralLayout /></PrivateRoute>}>
         <Route path="/frotas" element={<Frotas />} />
         <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
         <Route path="/abastecimentos" element={<PainelAbastecimentos />} />
@@ -41,7 +49,7 @@ export function Router() {
         <Route path="/entradas-saidas" element={<PainelEntradasSaidas />} />
       </Route>
 
-      <Route path="/" element={<BarraLateralMotoristaLayout />}>
+      <Route path="/" element={<PrivateRoute><BarraLateralMotoristaLayout /></PrivateRoute>}>
         <Route path="/motoristas" element={<Motoristas />} />
         <Route path="/cadastro-motorista" element={<CadastroMotorista />} />
         

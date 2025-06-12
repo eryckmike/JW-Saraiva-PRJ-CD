@@ -1,67 +1,38 @@
-import React, { useState } from 'react';
-import Logo from "../../assets/Logo.png"
-import { SignUpConteiner } from './styles';
+import { useState } from 'react';
 
-interface SignUpFormData {
-  name: string;
-  email: string;
-  password: string;
-}
+export function SignUp({ onSuccess }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [erro, setErro] = useState('');
 
-export function SignUp() {
-  const [formData, setFormData] = useState<SignUpFormData>({
-    name: '',
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log('Dados cadastrados:', formData);
-    // adicionar aqui o ip-numerico certo que vocês vao usar
-  };
+    setErro('');
+    try {
+      const res = await fetch('http://localhost:3000/auth/signup',{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErro(data.error || 'Erro ao cadastrar');
+        return;
+      }
+      onSuccess && onSuccess();
+    } catch (err) {
+      setErro('Erro de conexão');
+    }
+  }
 
-  //  caso forem adicionar mais alguma coisa copiar o de cima e mudar o nome 
   return (
-    <SignUpConteiner>
-      <form onSubmit={handleSubmit}>
-        <img src={Logo} alt="Logo" />
-        <h1>Cadastro</h1>
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-       
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Senha"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Cadastro</button>
-      </form>
-    </SignUpConteiner>
+    <form onSubmit={handleSubmit}>
+      <input value={name} onChange={e => setName(e.target.value)} placeholder="Nome" />
+      <input value={email} onChange={e => setEmail(e.target.value)} placeholder="E-mail" />
+      <input value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" type="password" />
+      <button type="submit">Cadastrar</button>
+      {erro && <div style={{ color: 'red' }}>{erro}</div>}
+    </form>
   );
 }

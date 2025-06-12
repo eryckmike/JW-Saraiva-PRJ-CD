@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { Modal } from '../../components/Header/Modal';
 import {
   MotoristasContainer,
   PainelMotoristas,
@@ -6,107 +7,134 @@ import {
   GradeMotoristas,
   CartaoMotorista,
   AcoesIcones
-} from "./styles";
-import { Pencil, Trash2 } from "lucide-react";
+} from './styles';
+import { Pencil, Trash2 } from 'lucide-react';
 
-function EditarMotoristaModal({ motorista, onClose, onSave }) {
-  const [nome, setNome] = useState(motorista.nome);
-  const [categoria, setCategoria] = useState(motorista.categoria);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave({ ...motorista, nome, categoria });
-    onClose();
-  };
-
-  return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-      background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
-    }}>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          background: '#161b22', color: '#E8EBED', borderRadius: 16, padding: 32, minWidth: 320, boxShadow: '0 4px 32px #0008', display: 'flex', flexDirection: 'column', gap: 20
-        }}
-      >
-        <h2 style={{margin:0, marginBottom: 16, color:'#DE562C', fontWeight:600, fontSize:22}}>Editar Motorista</h2>
-        <label style={{fontWeight:500, fontSize:15}}>Nome:
-          <input value={nome} onChange={e => setNome(e.target.value)} style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }} />
-        </label>
-        <label style={{fontWeight:500, fontSize:15}}>Categoria:
-          <input value={categoria} onChange={e => setCategoria(e.target.value)} style={{ width: '100%', marginTop: 4, padding: 10, borderRadius: 8, border: '1px solid #30363d', background: '#0d1117', color: '#E8EBED', fontSize: 15 }} />
-        </label>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
-          <button type="button" onClick={onClose} style={{ background: '#30363d', color: '#E8EBED', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 500, fontSize: 15, cursor: 'pointer' }}>Cancelar</button>
-          <button type="submit" style={{ background: '#DE562C', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, fontSize: 15, cursor: 'pointer', boxShadow: '0 2px 8px #de562c22' }}>Salvar</button>
-        </div>
-      </form>
-    </div>
-  );
+interface MotoristaDTO {
+  id: number;
+  nome: string;
+  cpf: string;
+  cnh: string;
+  telefone: string;
+  email: string;
 }
 
 export function Motoristas() {
-  const [busca, setBusca] = useState("");
-  const [motoristas, setMotoristas] = useState([
-    { id: 1, nome: "Nicole Bahls", categoria: "A" },
-    { id: 2, nome: "João Pedro", categoria: "D" },
-    { id: 3, nome: "Maria Clara", categoria: "B" },
-    { id: 4, nome: "Carlos Silva", categoria: "C" },
-    { id: 5, nome: "Fernanda Souza", categoria: "E" },
-    { id: 6, nome: "José Raimundo", categoria: "D" },
-  ]);
-  const [editando, setEditando] = useState(null);
+  const BASE_URL = 'http://localhost:3000/motoristas';
 
+  // Estados
+  const [motoristas, setMotoristas]               = useState<MotoristaDTO[]>([]);
+  const [filtro, setFiltro]                       = useState('');
+  const [isModalOpen, setIsModalOpen]             = useState(false);
+  const [motoristaEditando, setMotoristaEditando] = useState<MotoristaDTO | null>(null);
+  const [formData, setFormData] = useState({
+    nome:     '',
+    cpf:      '',
+    cnh:      '',
+    telefone: '',
+    email:    ''
+  });
+
+  // 1) Carrega a lista ao montar
+  useEffect(() => {
+    (async () => {
+      try {
+        const res  = await fetch(BASE_URL);
+        if (!res.ok) throw new Error('Erro ao buscar motoristas');
+        const data = (await res.json()) as MotoristaDTO[];
+        setMotoristas(data);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  // 2) Filtra localmente
   const motoristasFiltrados = motoristas.filter(m =>
-    m.nome.toLowerCase().includes(busca.toLowerCase()) ||
-    m.id.toString().includes(busca)
+    m.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+    m.id.toString().includes(filtro)
   );
 
-  const deletarMotorista = (id: number) => {
-    setMotoristas((prev) => prev.filter((m) => m.id !== id));
-  };
-
-  const abrirModalEditar = (motorista) => {
-    setEditando(motorista);
-  };
-
-  const salvarEdicao = (motoristaEditado) => {
-    setMotoristas((prev) =>
-      prev.map((m) =>
-        m.id === motoristaEditado.id ? { ...m, nome: motoristaEditado.nome, categoria: motoristaEditado.categoria.toUpperCase() } : m
-      )
-    );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      //
+  // 3) Deleta no servidor e atualiza o state
+// Substitua seu handleDelete atual por este:
+    async function handleDelete(id: number) {
+      try {
+        const res = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
+        if (!res.ok) {
+          console.error('Erro ao deletar motorista, status:', res.status);
+          return;
+        }
+        // se chegamos aqui, deu certo
+        setMotoristas(prev => prev.filter(m => m.id !== id));
+      } catch (err) {
+        console.error('Erro ao deletar motorista:', err);
+      }
     }
-  };
+
+  // 4) Prepara e abre o modal para edição
+  function handleEdit(m: MotoristaDTO) {
+    setMotoristaEditando(m);
+    setFormData({
+      nome:     m.nome,
+      cpf:      m.cpf,
+      cnh:      m.cnh,
+      telefone: m.telefone,
+      email:    m.email
+    });
+    setIsModalOpen(true);
+  }
+
+  // 5) Envia PUT ao servidor e atualiza o state
+  async function onSubmitEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!motoristaEditando) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}/${motoristaEditando.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (!res.ok) throw new Error('Falha ao atualizar motorista');
+
+      const atualizado = (await res.json()) as MotoristaDTO;
+      setMotoristas(prev =>
+        prev.map(m => (m.id === atualizado.id ? atualizado : m))
+      );
+      setIsModalOpen(false);
+      setMotoristaEditando(null);
+    } catch (err) {
+      console.error('Erro ao atualizar motorista:', err);
+    }
+  }
 
   return (
     <MotoristasContainer>
       <PainelMotoristas>
+        {/* campo de busca */}
         <BarraPesquisa>
           <input
             type="text"
-            placeholder="Nome / Cod. Motorista"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            onKeyDown={handleKeyDown}
+            placeholder="Buscar motorista…"
+            value={filtro}
+            onChange={e => setFiltro(e.target.value)}
           />
         </BarraPesquisa>
+
+        {/* grid de cartões */}
         <GradeMotoristas>
           {motoristasFiltrados.length > 0 ? (
-            motoristasFiltrados.map((m) => (
+            motoristasFiltrados.map(m => (
               <CartaoMotorista key={m.id}>
+                <p><strong>{m.nome}</strong></p>
+                <p>CPF: {m.cpf}</p>
+                <p>CNH: {m.cnh}</p>
+                <p>Telefone: {m.telefone}</p>
+                <p>Email: {m.email}</p>
                 <AcoesIcones>
-                  <Pencil size={18} color="#E8EBED" onClick={() => abrirModalEditar(m)} />
-                  <Trash2 size={18} color="#DE562C" onClick={() => deletarMotorista(m.id)} />
+                  <Pencil  size={16} onClick={() => handleEdit(m)} />
+                  <Trash2 size={16} onClick={() => handleDelete(m.id)} />
                 </AcoesIcones>
-                <p>{m.nome}</p>
-                <p>Categoria {m.categoria}</p>
               </CartaoMotorista>
             ))
           ) : (
@@ -114,12 +142,58 @@ export function Motoristas() {
           )}
         </GradeMotoristas>
       </PainelMotoristas>
-      {editando && (
-        <EditarMotoristaModal
-          motorista={editando}
-          onClose={() => setEditando(null)}
-          onSave={salvarEdicao}
-        />
+
+      {/* modal de edição */}
+      {isModalOpen && motoristaEditando && (
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <h2>Editar Motorista</h2>
+          <form
+            onSubmit={onSubmitEdit}
+            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+          >
+            <label>
+              Nome:
+              <input
+                value={formData.nome}
+                onChange={e => setFormData(f => ({ ...f, nome: e.target.value }))}
+              />
+            </label>
+            <label>
+              CPF:
+              <input
+                value={formData.cpf}
+                onChange={e => setFormData(f => ({ ...f, cpf: e.target.value }))}
+              />
+            </label>
+            <label>
+              CNH:
+              <input
+                value={formData.cnh}
+                onChange={e => setFormData(f => ({ ...f, cnh: e.target.value }))}
+              />
+            </label>
+            <label>
+              Telefone:
+              <input
+                value={formData.telefone}
+                onChange={e => setFormData(f => ({ ...f, telefone: e.target.value }))}
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                value={formData.email}
+                onChange={e => setFormData(f => ({ ...f, email: e.target.value }))}
+              />
+            </label>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button type="button" onClick={() => setIsModalOpen(false)}>
+                Cancelar
+              </button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </Modal>
       )}
     </MotoristasContainer>
   );
