@@ -89,3 +89,75 @@ export const Status = styled.span<StatusProps>`
     status === "Paga" ? "#2ecc71" : "#e74c3c"};
   display: inline-block;
 `;
+export const PainelHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+
+  button {
+    background: #DE562C;
+    border: none;
+    color: #fff;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background: #bf4523;
+  }
+`;
+
+// Overlay + Modal (criar/editar)
+export const Overlay = styled.div`
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+`;
+export const ModalContainer = styled.div`
+  background: #161b22;
+  color: #E8EBED;
+  border-radius: 12px;
+  padding: 32px;
+  width: 90%; max-width: 500px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.8);
+  display: flex; flex-direction: column; gap: 16px;
+`;
+export const ModalHeader = styled.div`
+  display: flex; justify-content: space-between; align-items: center;
+  h2 { margin:0; color:#DE562C; font-size:1.5rem; font-weight:600; }
+  button {
+    background: transparent; border:none; color:#7A8A96;
+    font-size:1.25rem; cursor:pointer; transition:color .2s;
+    &:hover { color:#E8EBED; }
+  }
+`;
+export const ModalForm = styled.form`
+  display:flex; flex-direction:column; gap:12px;
+  label {
+    font-size:.9rem; font-weight:500;
+    input, select {
+      margin-top:4px; width:100%; padding:8px; border-radius:6px;
+      border:1px solid #30363d; background:#0d1117; color:#E8EBED;
+      font-size:.9rem; outline:none; transition:border-color .2s;
+      &:focus { border-color:#DE562C }
+    }
+  }
+`;
+export const ModalActions = styled.div`
+  display:flex; justify-content:flex-end; gap:8px; margin-top:16px;
+  button {
+    padding:8px 16px; border-radius:6px; border:none; cursor:pointer;
+    font-weight:600; font-size:.9rem; transition:background .2s;
+    &.cancel { background:#30363d; color:#E8EBED;
+      &:hover{ background:#424751; } }
+    &.save { background:#DE562C; color:#fff;
+      &:hover{ background:#bf4523; } }
+  }
+`;
