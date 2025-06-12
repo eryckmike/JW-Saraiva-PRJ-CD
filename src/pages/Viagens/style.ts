@@ -72,3 +72,63 @@ export const Coluna = styled.div`
   color: #E8EBED;
   font-weight: 500;
 `;
+
+import styled from "styled-components";
+
+// Botão que abre o modal
+export const BotaoNovaViagem = styled.button`
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+`;
+
+// Layout do formulário dentro do modal
+export const FormModal = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+// Campo individual do formulário
+export const CampoForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  & > label {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  & > input,
+  & > select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+  }
+`;
+
+// Container para os botões “Cancelar” e “Salvar”
+export const AcoesModal = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+
+  & > button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+  }
+  & > button[type="button"] {
+    background-color: #ccc;
+    color: #333;
+  }
+  & > button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+  }
+`;
+

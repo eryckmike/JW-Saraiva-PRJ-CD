@@ -1,79 +1,84 @@
+import React, { useState, useEffect } from 'react'
 import {
-  PainelContainer,
-  PainelTitle,
-  ListaManutencoes,
-  CartaoManutencao,
-  LinhaInfo,
-  Coluna,
-  Aviso
-} from "./style";
+  PainelContainer, PainelTitle,
+  ListaManutencoes, CartaoManutencao,
+  LinhaInfo, Coluna
+} from './style'
 
-interface RegistroManutencao {
-  id: number;
-  veiculo: string;
-  codigo: string;
-  aviso: string;
-  dataEntrada: string;
-  dataSaida: string;
+interface VeiculoDTO {
+  id: number
+  nome: string
+  codigo: string
+  placa: string
 }
 
-export function PainelManutencao() {
-  const manutencoes: RegistroManutencao[] = [
-    {
-      id: 1,
-      veiculo: "Caminhão Volvo FH",
-      codigo: "VOL-FH-001",
-      aviso: "Troca de óleo programada",
-      dataEntrada: "2025-06-01",
-      dataSaida: "2025-06-05"
-    },
-    {
-      id: 2,
-      veiculo: "Mercedes-Benz Actros",
-      codigo: "MB-ACT-002",
-      aviso: "Revisão dos freios",
-      dataEntrada: "2025-06-02",
-      dataSaida: "2025-06-06"
-    }
-  ];
+interface ManutencaoDTO {
+  id: number
+  dataEntrada: string
+  dataSaidaEstimad: string
+  motivo: string
+  veiculo: VeiculoDTO
+}
+
+interface RegistroManutencao {
+  id: number
+  dataEntrada: string
+  dataSaidaEstimad: string
+  motivo: string
+  veiculoNome: string
+  veiculoCodigo: string
+  veiculoPlaca: string
+}
+
+
+export function PainelManutencoes() {
+  const [manut, setManut] = useState<RegistroManutencao[]>([])
+  const BASE = 'http://localhost:3000/manutencoes'
+
+  useEffect(() => {
+    fetch(BASE)
+      .then(res => res.json() as Promise<ManutencaoDTO[]>)
+      .then(data => {
+        setManut(
+          data.map(m => ({
+            id:               m.id,
+            dataEntrada:      new Date(m.dataEntrada).toLocaleDateString(),
+            dataSaidaEstimad: new Date(m.dataSaidaEstimad).toLocaleDateString(),
+            motivo:           m.motivo,
+            veiculoNome:      m.veiculo.nome,
+            veiculoCodigo:    m.veiculo.codigo,
+            veiculoPlaca:     m.veiculo.placa
+          }))
+        )
+      })
+      .catch(console.error)
+  }, [])
 
   return (
     <PainelContainer>
       <PainelTitle>Manutenções</PainelTitle>
       <ListaManutencoes>
-        {manutencoes.map((registro) => (
-          <CartaoManutencao key={registro.id}>
+        {manut.map(r => (
+          <CartaoManutencao key={r.id}>
             <LinhaInfo>
-              <Coluna>
-                <span>Veículo</span>
-                {registro.veiculo}
-              </Coluna>
-              <Coluna>
-                <span>Código</span>
-                {registro.codigo}
-              </Coluna>
+              <Coluna><span>Entrada</span>{r.dataEntrada}</Coluna>
+              <Coluna><span>Saída Estimada</span>{r.dataSaidaEstimad}</Coluna>
             </LinhaInfo>
             <LinhaInfo>
-              <Coluna>
-                <span>Entrada</span>
-                {registro.dataEntrada}
-              </Coluna>
-              <Coluna>
-                <span>Saída esperada</span>
-                {registro.dataSaida}
-              </Coluna>
+              <Coluna><span>Veículo</span>{r.veiculoNome}</Coluna>
+              <Coluna><span>Código</span>{r.veiculoCodigo}</Coluna>
             </LinhaInfo>
             <LinhaInfo>
-              <Coluna width="100%">
-                <span>Aviso</span>
-                <Aviso>
-                  <input value={registro.aviso} readOnly />
-                </Aviso>
+              <Coluna><span>Placa</span>{r.veiculoPlaca}</Coluna>
+            </LinhaInfo>
+            <LinhaInfo>
+              <Coluna style={{ width: '100%' }}>
+                <span>Motivo</span>{r.motivo}
               </Coluna>
             </LinhaInfo>
           </CartaoManutencao>
         ))}
       </ListaManutencoes>
     </PainelContainer>
-  );
+  )
 }

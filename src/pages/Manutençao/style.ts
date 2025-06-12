@@ -31,6 +31,7 @@ export const ListaManutencoes = styled.div`
 
 export const CartaoManutencao = styled.div`
   background: #161b22;
+  border-left: 4px solid #f97316;
   border-radius: 10px;
   padding: 16px 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);

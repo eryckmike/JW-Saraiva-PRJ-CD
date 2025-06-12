@@ -15,7 +15,7 @@ import { BarraLateralMotoristaLayout } from "./layouts/BarraLateralLayoutMotoris
 import { PainelEntradasSaidas } from "./pages/painel";
 import { PainelAbastecimentos } from "./pages/Abastecimentos";
 import { PainelMultas } from "./pages/Multas";
-import { PainelManutencao } from "./pages/Manutençao";
+import { PainelManutencoes } from "./pages/Manutençao";
 import { PainelViagens } from "./pages/Viagens"; 
 
 export function Router() {
@@ -36,7 +36,7 @@ export function Router() {
         <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
         <Route path="/abastecimentos" element={<PainelAbastecimentos />} />
         <Route path="/multas" element={<PainelMultas />} />
-        <Route path="/manutencao" element={<PainelManutencao />} />
+        <Route path="/manutencao" element={<PainelManutencoes />} />
         <Route path="/viagens" element={<PainelViagens />} />
         <Route path="/entradas-saidas" element={<PainelEntradasSaidas />} />
       </Route>
