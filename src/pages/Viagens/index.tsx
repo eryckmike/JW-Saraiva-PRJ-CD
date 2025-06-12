@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   PainelContainer,
   PainelTitle,
@@ -14,33 +15,34 @@ interface RegistroViagem {
   motorista: string;
   origem: string;
   destino: string;
-  veiculo: string;
-  codigoVeiculo: string;
+  veiculo: string;        // nome do veículo
+  codigoVeiculo: string;  // código do veículo
 }
 
 export function PainelViagens() {
-  const viagens: RegistroViagem[] = [
-    {
-      id: 1,
-      dataSaida: "2025-06-03",
-      dataVolta: "2025-06-13",
-      motorista: "Antonella Braga",
-      origem: "Fortaleza - CE",
-      destino: "Recife - PE",
-      veiculo: "Mercedes-Benz Actros",
-      codigoVeiculo: "MB-ACT-002"
-    },
-    {
-      id: 2,
-      dataSaida: "2025-06-10",
-      dataVolta: "2025-06-22",
-      motorista: "Gilvandro Neto",
-      origem: "Fortaleza - CE",
-      destino: "Natal - RN",
-      veiculo: "Volvo FH",
-      codigoVeiculo: "VOL-FH-001"
-    }
-  ];
+  const [viagens, setViagens] = useState<RegistroViagem[]>([]);
+  const BASE_URL = "http://localhost:3000/viagens";
+
+  useEffect(() => {
+    fetch(BASE_URL)
+      .then((res) => res.json())
+      .then((data: any[]) => {
+        const registros: RegistroViagem[] = data.map((item) => ({
+          id: item.id,
+          dataSaida: new Date(item.dataSaida).toLocaleDateString(),
+          dataVolta: new Date(item.dataVolta).toLocaleDateString(),
+          motorista: item.motorista.nome,
+          origem: item.origem,
+          destino: item.destino,
+          veiculo: item.veiculo.nome,         // usa o campo nome do veículo
+          codigoVeiculo: item.veiculo.codigo, // usa o campo código
+        }));
+        setViagens(registros);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar viagens:", err);
+      });
+  }, []); // <-- não esqueça o array de dependências vazio!
 
   return (
     <PainelContainer>
@@ -58,26 +60,25 @@ export function PainelViagens() {
                 {registro.dataVolta}
               </Coluna>
             </LinhaInfo>
+
             <LinhaInfo>
               <Coluna>
                 <span>Motorista</span>
                 {registro.motorista}
               </Coluna>
               <Coluna>
-                <span>Caminhão</span>
-                {registro.veiculo}
-              </Coluna>
-            </LinhaInfo>
-            <LinhaInfo>
-              <Coluna>
                 <span>Origem</span>
                 {registro.origem}
               </Coluna>
+            </LinhaInfo>
+
+            <LinhaInfo>
               <Coluna>
                 <span>Destino</span>
                 {registro.destino}
               </Coluna>
             </LinhaInfo>
+
             <LinhaInfo>
               <Coluna style={{ width: "100%" }}>
                 <span>Código do Caminhão</span>
