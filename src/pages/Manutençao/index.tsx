@@ -4,7 +4,8 @@ import {
   PainelContainer, PainelTitle,
   ListaManutencoes, CartaoManutencao,
   LinhaInfo, Coluna,
-  BotaoNovaManutencao
+  BotaoNovaManutencao,
+  PainelHeader
 } from './style'
 
 interface VeiculoDTO {
@@ -130,10 +131,12 @@ function handleSubmit(e: FormEvent) {
 
   return (
     <PainelContainer>
-      <PainelTitle>Manutenções</PainelTitle>
-      <BotaoNovaManutencao onClick={openModal}>
-         Nova Manutenção
-      </BotaoNovaManutencao>
+      <PainelHeader>
+        <PainelTitle>Manutenções</PainelTitle>
+        <BotaoNovaManutencao onClick={openModal}>
+           Nova Manutenção
+        </BotaoNovaManutencao>
+      </PainelHeader>
 
       <ListaManutencoes>
         {manut.map(r => (

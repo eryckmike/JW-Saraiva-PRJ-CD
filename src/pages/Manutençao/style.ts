@@ -23,6 +23,13 @@ export const PainelTitle = styled.h2`
   color: #E8EBED;
 `;
 
+export const PainelHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+`;
+
 export const ListaManutencoes = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -100,7 +107,6 @@ export const Aviso = styled.div`
 `;
 
 export const BotaoNovaManutencao = styled.button`
-  margin-bottom: 1.5rem;
   padding: 0.75rem 1.25rem;
   border: none;
   background-color: #DE562C;
