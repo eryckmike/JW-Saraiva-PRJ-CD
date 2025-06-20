@@ -73,7 +73,7 @@ export const Coluna = styled.div`
   font-weight: 500;
 `;
 
-// Botão que abre o modal
+
 export const BotaoNovaViagem = styled.button`
   margin-bottom: 1.5rem;
   padding: 0.75rem 1.25rem;
@@ -90,14 +90,13 @@ export const BotaoNovaViagem = styled.button`
   }
 `;
 
-// Layout do formulário dentro do modal
+
 export const FormModal = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
 `;
 
-// Campo individual do formulário
 export const CampoForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -119,7 +118,7 @@ export const AcoesIcones = styled.div`
   align-items: center;
   justify-content: flex-end;
 `;
-// Container para os botões "Cancelar" e "Salvar"
+
 export const AcoesModal = styled.div`
   display: flex;
   justify-content: flex-end;

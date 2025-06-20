@@ -22,7 +22,7 @@ interface MotoristaDTO {
 export function Motoristas() {
   const BASE_URL = 'http://localhost:3000/motoristas';
 
-  // Estados
+ 
   const [motoristas, setMotoristas]               = useState<MotoristaDTO[]>([]);
   const [filtro, setFiltro]                       = useState('');
   const [isModalOpen, setIsModalOpen]             = useState(false);
@@ -35,7 +35,6 @@ export function Motoristas() {
     email:    ''
   });
 
-  // 1) Carrega a lista ao montar
   useEffect(() => {
     (async () => {
       try {
@@ -49,14 +48,13 @@ export function Motoristas() {
     })();
   }, []);
 
-  // 2) Filtra localmente
+
   const motoristasFiltrados = motoristas.filter(m =>
     m.nome.toLowerCase().includes(filtro.toLowerCase()) ||
     m.id.toString().includes(filtro)
   );
 
-  // 3) Deleta no servidor e atualiza o state
-// Substitua seu handleDelete atual por este:
+
     async function handleDelete(id: number) {
       try {
         const res = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
@@ -64,14 +62,14 @@ export function Motoristas() {
           console.error('Erro ao deletar motorista, status:', res.status);
           return;
         }
-        // se chegamos aqui, deu certo
+ 
         setMotoristas(prev => prev.filter(m => m.id !== id));
       } catch (err) {
         console.error('Erro ao deletar motorista:', err);
       }
     }
 
-  // 4) Prepara e abre o modal para edição
+
   function handleEdit(m: MotoristaDTO) {
     setMotoristaEditando(m);
     setFormData({
@@ -84,7 +82,7 @@ export function Motoristas() {
     setIsModalOpen(true);
   }
 
-  // 5) Envia PUT ao servidor e atualiza o state
+  
   async function onSubmitEdit(e: React.FormEvent) {
     e.preventDefault();
     if (!motoristaEditando) return;
@@ -111,7 +109,7 @@ export function Motoristas() {
   return (
     <MotoristasContainer>
       <PainelMotoristas>
-        {/* campo de busca */}
+      
         <BarraPesquisa>
           <input
             type="text"
@@ -121,7 +119,7 @@ export function Motoristas() {
           />
         </BarraPesquisa>
 
-        {/* grid de cartões */}
+  
         <GradeMotoristas>
           {motoristasFiltrados.length > 0 ? (
             motoristasFiltrados.map(m => (
@@ -143,7 +141,7 @@ export function Motoristas() {
         </GradeMotoristas>
       </PainelMotoristas>
 
-      {/* modal de edição */}
+
       {isModalOpen && motoristaEditando && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <h2>Editar Motorista</h2>

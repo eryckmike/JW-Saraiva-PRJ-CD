@@ -22,45 +22,63 @@ interface RegistroViagem {
   origem: string;
   destino: string;
   veiculo: string;
-  codigoVeiculo: string;
+  placaVeiculo: string;
+  bloqueado: boolean;
 }
 
 export function PainelViagens() {
-  const BASE_URL = "http://localhost:3000/viagens";
-
-  // estados
   const [viagens, setViagens] = useState<RegistroViagem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [desbloqueando, setDesbloqueando] = useState<number | null>(null);
+  const [checklist, setChecklist] = useState("");
   const [motoristas, setMotoristas] = useState<{ id: number; label: string }[]>([]);
-  const [veiculos,   setVeiculos]   = useState<{ id: number; label: string }[]>([]);
+  const [veiculos, setVeiculos] = useState<{ id: number; label: string }[]>([]);
   const [form, setForm] = useState({
-    dataSaida:   "",
-    dataVolta:   "",
+    dataSaida: "",
+    dataVolta: "",
     motoristaId: "",
-    veiculoId:   "",
-    origem:      "",
-    destino:     ""
+    veiculoId: "",
+    origem: "",
+    destino: ""
   });
 
-  // 1) carrega viagens, motoristas e veículos
-  useEffect(() => {
+  const BASE_URL = "http://localhost:3000/viagens";
+
+  function diasRestantes(dataSaida: string) {
+  const MS_DIA = 24 * 60 * 60 * 1000;
+  const saida = new Date(dataSaida).getTime();
+  const fim = saida + 30 * MS_DIA;
+  const diff = fim - Date.now();
+  if (diff <= 0) return "Prazo excedido!";
+  const dias = Math.floor(diff / MS_DIA);
+  if (dias > 0) return `${dias} dias restantes`;
+  return "Últimas horas!";
+}
+
+
+
+  function loadViagens() {
     fetch(BASE_URL)
       .then(res => res.json())
       .then((data: any[]) => {
         const registros = data.map(item => ({
           id: item.id,
-          dataSaida: new Date(item.dataSaida).toLocaleDateString(),
-          dataVolta: new Date(item.dataVolta).toLocaleDateString(),
+          dataSaida: item.dataSaida,
+          dataVolta: item.dataVolta,
           motorista: item.motorista.nome,
           origem: item.origem,
           destino: item.destino,
           veiculo: item.veiculo.nome,
-          codigoVeiculo: item.veiculo.codigo
+          placaVeiculo: item.veiculo.placa,
+          bloqueado: !!item.veiculo.bloqueado,
         }));
         setViagens(registros);
       })
       .catch(console.error);
+  }
+
+  useEffect(() => {
+    loadViagens();
 
     fetch("http://localhost:3000/motoristas")
       .then(res => res.json())
@@ -77,7 +95,6 @@ export function PainelViagens() {
       .catch(console.error);
   }, []);
 
-  // 2) abrir/fechar modal
   function openModal() {
     setForm({ dataSaida: "", dataVolta: "", motoristaId: "", veiculoId: "", origem: "", destino: "" });
     setIsModalOpen(true);
@@ -86,19 +103,18 @@ export function PainelViagens() {
     setIsModalOpen(false);
   }
 
-  // 3) criar nova viagem
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        dataSaida:   form.dataSaida,
-        dataVolta:   form.dataVolta || null,
+        dataSaida: form.dataSaida,
+        dataVolta: form.dataVolta || null,
         motoristaId: Number(form.motoristaId),
-        veiculoId:   Number(form.veiculoId),
-        origem:      form.origem,
-        destino:     form.destino
+        veiculoId: Number(form.veiculoId),
+        origem: form.origem,
+        destino: form.destino
       })
     })
       .then(res => {
@@ -107,26 +123,11 @@ export function PainelViagens() {
       })
       .then(() => {
         closeModal();
-        return fetch(BASE_URL);
-      })
-      .then(res => res.json())
-      .then((data: any[]) => {
-        const registros = data.map(item => ({
-          id: item.id,
-          dataSaida: new Date(item.dataSaida).toLocaleDateString(),
-          dataVolta: new Date(item.dataVolta).toLocaleDateString(),
-          motorista: item.motorista.nome,
-          origem: item.origem,
-          destino: item.destino,
-          veiculo: item.veiculo.nome,
-          codigoVeiculo: item.veiculo.codigo
-        }));
-        setViagens(registros);
+        loadViagens();
       })
       .catch(console.error);
   }
 
-  // 4) apagar viagem
   async function handleDelete(id: number) {
     try {
       const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
@@ -140,6 +141,17 @@ export function PainelViagens() {
     }
   }
 
+  async function handleDesbloqueio(veiculoId: number, checklist: string) {
+    await fetch(`http://localhost:3000/veiculos/${veiculoId}/desbloquear`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ checklist }), 
+    });
+    setDesbloqueando(null);
+    setChecklist("");
+    loadViagens();
+  }
+
   return (
     <PainelContainer>
       <PainelTitle>Viagens</PainelTitle>
@@ -151,11 +163,15 @@ export function PainelViagens() {
             <LinhaInfo>
               <Coluna>
                 <span>Saída</span>
-                {registro.dataSaida}
+                {registro.dataSaida
+                  ? new Date(registro.dataSaida).toLocaleDateString()
+                  : "--"}
               </Coluna>
               <Coluna>
                 <span>Volta</span>
-                {registro.dataVolta}
+                {registro.dataVolta
+                  ? new Date(registro.dataVolta).toLocaleDateString()
+                  : "--"}
               </Coluna>
             </LinhaInfo>
 
@@ -179,17 +195,71 @@ export function PainelViagens() {
 
             <LinhaInfo>
               <Coluna>
-                <span>Código do Caminhão</span>
-                {registro.codigoVeiculo}
+                <span>Placa</span>
+                {registro.placaVeiculo}
               </Coluna>
-              {/* ícones de ação */}
-              <Coluna style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Coluna style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+
+                {registro.bloqueado ? (
+                  <>
+                    <span style={{ color: 'red', fontWeight: 600, marginBottom: 8 }}>Bloqueado</span>
+                    <button
+                      style={{
+                        background: "#DE562C",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "4px 14px",
+                        marginBottom: 8,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setDesbloqueando(registro.id)}
+                    >
+                      Desbloquear
+                    </button>
+                    {desbloqueando === registro.id && (
+                      <form
+                        onSubmit={e => {
+                          e.preventDefault();
+                          handleDesbloqueio(registro.id, checklist);
+                        }}
+                        style={{ marginTop: 8, width: 160 }}
+                      >
+                        <textarea
+                          required
+                          placeholder="Checklist de retorno"
+                          value={checklist}
+                          onChange={e => setChecklist(e.target.value)}
+                          style={{ width: '100%', height: 45, marginBottom: 8, borderRadius: 6, border: '1px solid #ccc', padding: 8, fontSize: 14 }}
+                        />
+                        <button
+                          type="submit"
+                          style={{
+                            padding: '5px 12px',
+                            background: '#0d1117',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: 6,
+                            fontWeight: 600,
+                            fontSize: 14
+                          }}
+                        >
+                          Enviar
+                        </button>
+                      </form>
+                    )}
+                  </>
+                ) : (
+                  <span style={{ color: '#3b82f6', fontWeight: 500 }}>
+                    {diasRestantes(registro.dataSaida)}
+                  </span>
+                )}
                 <AcoesIcones>
                   <Trash2
                     size={16}
                     color="#DE562C"
                     onClick={() => handleDelete(registro.id)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginTop: 10 }}
                   />
                 </AcoesIcones>
               </Coluna>
@@ -199,19 +269,24 @@ export function PainelViagens() {
       </ListaViagens>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <form onSubmit={handleSubmit} style={{
-          background: '#161b22',
-          color: '#E8EBED',
-          borderRadius: 16,
-          padding: 32,
-          minWidth: 340,
-          boxShadow: '0 4px 32px #0008',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 20,
-          maxWidth: 420,
-        }}>
-          <h2 style={{ margin:0, marginBottom:16, color:'#DE562C', fontWeight:600, fontSize:22 }}>Nova Viagem</h2>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            background: '#161b22',
+            color: '#E8EBED',
+            borderRadius: 16,
+            padding: 32,
+            minWidth: 340,
+            boxShadow: '0 4px 32px #0008',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 20,
+            maxWidth: 420,
+          }}
+        >
+          <h2 style={{ margin: 0, marginBottom: 16, color: '#DE562C', fontWeight: 600, fontSize: 22 }}>
+            Nova Viagem
+          </h2>
 
           <CampoForm>
             <label>Data Saída</label>
@@ -284,7 +359,6 @@ export function PainelViagens() {
             <button type="button" onClick={closeModal}>Cancelar</button>
             <button type="submit">Salvar</button>
           </AcoesModal>
-
         </form>
       </Modal>
     </PainelContainer>

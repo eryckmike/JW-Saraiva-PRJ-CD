@@ -27,7 +27,7 @@ interface RegistroMulta {
   situacao: "Paga" | "Pendente";
 }
 
-// Aqui omitimos o id, pois o form não edita/cria o id
+
 type MultaForm = Omit<RegistroMulta, "id">;
 
 export function PainelMultas() {
@@ -95,14 +95,14 @@ export function PainelMultas() {
     e.preventDefault();
 
     if (editingId !== null) {
-      // edição
+      
       setMultas(prev =>
         prev.map(m =>
           m.id === editingId ? { id: editingId, ...form } : m
         )
       );
     } else {
-      // criação
+      
       const nextId = Math.max(0, ...multas.map(m => m.id)) + 1;
       setMultas(prev => [...prev, { id: nextId, ...form }]);
     }
@@ -155,7 +155,6 @@ export function PainelMultas() {
           </CartaoMulta>
         ))}
       </ListaMultas>
-
       {(isAdding || editingId !== null) && (
         <Overlay>
           <ModalContainer>

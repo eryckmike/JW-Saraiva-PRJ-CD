@@ -18,10 +18,9 @@ interface RegistroMovimentacao {
 }
 
 export function PainelEntradasSaidas() {
-  // 1) Estado para guardar os registros vindos do servidor
   const [registros, setRegistros] = useState<RegistroMovimentacao[]>([]);
 
-  // 2) Efeito para buscar as movimentações ao montar o componente
+
   useEffect(() => {
     fetch("http://localhost:3000/entradas-saidas")
       .then((res) => {
